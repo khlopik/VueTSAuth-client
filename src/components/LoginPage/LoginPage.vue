@@ -27,18 +27,20 @@
 										prepend-icon="person"
 										name="login"
 										label="Login"
-										type="text"></v-text-field>
+										type="text"
+										v-model="email"></v-text-field>
 									<v-text-field
 										prepend-icon="lock"
 										name="password"
 										label="Password"
 										id="password"
-										type="password"></v-text-field>
+										type="password"
+										v-model="password"></v-text-field>
 								</v-form>
 							</v-card-text>
 							<v-card-actions>
 								<v-spacer></v-spacer>
-								<v-btn color="primary">Login</v-btn>
+								<v-btn color="primary" @click.prevent="loginUser">Login</v-btn>
 							</v-card-actions>
 						</v-card>
 					</v-flex>
@@ -49,8 +51,27 @@
 </template>
 
 <script>
+import loginService from './loginService';
 export default {
 	name: 'LoginPage',
+	data: () => ({
+		email: '',
+		password: '',
+	}),
+	methods: {
+		loginUser() {
+			console.log('Login detected');
+			console.log('this.$refs.login: ', this.email);
+			console.log('this.$refs.password: ', this.password);
+			loginService(this.email, this.password)
+				.then((result) => {
+					console.log('result: ', result);
+				})
+				.catch((error) => {
+					console.log('error: ', error);
+				});
+		},
+	},
 };
 </script>
 
