@@ -20,8 +20,8 @@ const routes = [
 		component: Posts,
 	},
 	{
-		name: 'Login',
-		path: '/login',
+		name: 'login',
+		path: '/auth/login',
 		component: LoginPage,
 	},
 	{
@@ -52,20 +52,24 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+	const authUser = JSON.parse(localStorage.getItem('authUser'));
+	console.log('authUser: ', authUser);
+	console.log('to: ', to);
 	if (to.meta.requiresAuth) {
-		let authUser = localStorage.getItem('token');
-		if (!authUser) {
+		console.log('requiresAuth');
+		if (!authUser || !authUser.token) {
+			console.log('not found');
 			next({ name: 'login' });
 		} else if (to.meta.adminAuth) {
-			authUser = localStorage.getItem('token');
-			if (authUser) {
+			if (authUser.access === 'Admin') {
+				console.log('if Admin');
 				next();
 			} else {
 				next('/resident');
 			}
 		} else if (to.meta.residentAuth) {
-			authUser = localStorage.getItem('token');
-			if (authUser) {
+			if (authUser.access === 'Resident') {
+				console.log('if Resident');
 				next();
 			} else {
 				next('/admin');

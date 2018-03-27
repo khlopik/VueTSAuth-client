@@ -10,7 +10,11 @@ const loginService = (email, password) => {
 			password,
 		})
 			.then((result) => {
-				localStorage.setItem('token', result.headers['x-auth']);
+				localStorage.setItem('authUser', JSON.stringify({
+					email: result.data.email,
+					token: result.headers['x-auth'],
+					access: result.data.access,
+				}));
 				resolve(result.data);
 			})
 			.catch((error) => {
@@ -26,10 +30,31 @@ const createUser = (email, password) => (
 			password,
 		})
 			.then((result) => {
-				localStorage.setItem('token', result.headers['x-auth']);
+				localStorage.setItem('authUser', JSON.stringify({
+					email: result.data.email,
+					token: result.headers['x-auth'],
+					access: result.data.access,
+				}));
+				resolve(result.data);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+	})
+);
+
+const authUserByToken = token => (
+	new Promise((resolve, reject) => {
+		axios.get(`${config.dev.APIENDPOINT}/auth/me`, {
+			headers: {
+				'x-auth': token,
+			},
+		})
+			.then((result) => {
 				resolve(result);
 			})
 			.catch((error) => {
+				localStorage.removeItem('authUser');
 				reject(error);
 			});
 	})
@@ -38,4 +63,5 @@ const createUser = (email, password) => (
 export {
 	loginService,
 	createUser,
+	authUserByToken,
 };

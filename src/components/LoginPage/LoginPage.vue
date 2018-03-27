@@ -119,7 +119,7 @@ export default {
 		passwordErrors() {
 			const errors = [];
 			if (!this.$v.password.$dirty) return errors;
-			!this.$v.password.required() && errors.push('Password is required')();
+			!this.$v.password.required && errors.push('Password is required');
 			!this.$v.password.minLength && errors.push('Password should be at least 8 characters');
 			return errors;
 		},
