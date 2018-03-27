@@ -18,13 +18,11 @@ export default {
 	mounted() {
 		authUserByToken(JSON.parse(localStorage.getItem('authUser')).token)
 			.then((result) => {
-				console.log('result on ResidentPage: ', result);
 				this.email = result.data.email;
 			})
-			.catch((error) => {
-				console.log('error: ', error);
-				return 'Cannot find user information';
-			});
+			.catch(() => (
+				'Cannot find user information'
+			));
 	},
 };
 </script>

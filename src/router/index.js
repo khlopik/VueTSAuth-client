@@ -5,6 +5,7 @@ import Posts from '@/components/Posts';
 import LoginPage from '@/components/LoginPage/LoginPage';
 import AdminPage from '@/components/AdminPage/AdminPage';
 import ResidentPage from '@/components/ResidentPage/ResidentPage';
+import { authUserByToken } from '@/components/LoginPage/loginService';
 
 Vue.use(Router);
 
@@ -53,27 +54,30 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
-	console.log('authUser: ', authUser);
-	console.log('to: ', to);
 	if (to.meta.requiresAuth) {
-		console.log('requiresAuth');
 		if (!authUser || !authUser.token) {
-			console.log('not found');
+			localStorage.setItem('initialUserUrl', to.path);
 			next({ name: 'login' });
-		} else if (to.meta.adminAuth) {
-			if (authUser.access === 'Admin') {
-				console.log('if Admin');
-				next();
-			} else {
-				next('/resident');
-			}
-		} else if (to.meta.residentAuth) {
-			if (authUser.access === 'Resident') {
-				console.log('if Resident');
-				next();
-			} else {
-				next('/admin');
-			}
+		} else {
+			authUserByToken(authUser.token)
+				.then(() => {
+					if (to.meta.adminAuth) {
+						if (authUser.access === 'Admin') {
+							next();
+						} else {
+							next('/resident');
+						}
+					} else if (to.meta.residentAuth) {
+						if (authUser.access === 'Resident') {
+							next();
+						} else {
+							next('/admin');
+						}
+					}
+				})
+				.catch(() => {
+					localStorage.removeItem('authUser');
+				});
 		}
 	} else {
 		next();

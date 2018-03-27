@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { types } from '@/store';
 import { required, minLength, sameAs, email } from 'vuelidate/lib/validators';
 import { createUser, loginService } from './loginService';
 
@@ -109,6 +111,9 @@ export default {
 		return validation;
 	},
 	computed: {
+		...mapGetters({
+			initialUserUrl: types.auth.getter.GET_USER_URL,
+		}),
 		emailErrors() {
 			const errors = [];
 			if (!this.$v.email.$dirty) return errors;
@@ -134,21 +139,23 @@ export default {
 	methods: {
 		loginUser() {
 			loginService(this.email, this.password)
-				.then((result) => {
-					console.log('result: ', result);
+				.then(() => {
+					// console.log('result: ', result);
+					const url = localStorage.getItem('initialUserUrl');
+					if (url) {
+						this.$router.push(url);
+					}
 				})
-				.catch((error) => {
-					console.log('error: ', error);
+				.catch(() => {
 				});
 		},
 		createUser() {
-			console.log('createUser');
 			createUser(this.email, this.password)
-				.then((result) => {
-					console.log('result: ', result);
+				.then(() => {
+					// console.log('result: ', result);
 				})
-				.catch((error) => {
-					console.log('error: ', error);
+				.catch(() => {
+					// console.log('error: ', error);
 				});
 		},
 	},

@@ -1,9 +1,8 @@
 import axios from 'axios';
 import config from '../../../config';
 
-const loginService = (email, password) => {
-	console.log('start loginService');
-	return new Promise((resolve, reject) => {
+const loginService = (email, password) => (
+	new Promise((resolve, reject) => {
 		// console.log('process.env.APIENDPOINT: ', config.dev.APIENDPOINT);
 		axios.post(`${config.dev.APIENDPOINT}/auth/login`, {
 			email,
@@ -20,8 +19,7 @@ const loginService = (email, password) => {
 			.catch((error) => {
 				reject(error);
 			});
-	});
-};
+	}));
 
 const createUser = (email, password) => (
 	new Promise((resolve, reject) => {
