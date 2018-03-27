@@ -51,6 +51,29 @@ const router = new Router({
 	routes,
 });
 
-router.beforeEach();
+router.beforeEach((to, from, next) => {
+	if (to.meta.requiresAuth) {
+		let authUser = localStorage.getItem('token');
+		if (!authUser) {
+			next({ name: 'login' });
+		} else if (to.meta.adminAuth) {
+			authUser = localStorage.getItem('token');
+			if (authUser) {
+				next();
+			} else {
+				next('/resident');
+			}
+		} else if (to.meta.residentAuth) {
+			authUser = localStorage.getItem('token');
+			if (authUser) {
+				next();
+			} else {
+				next('/admin');
+			}
+		}
+	} else {
+		next();
+	}
+});
 
 export default router;
