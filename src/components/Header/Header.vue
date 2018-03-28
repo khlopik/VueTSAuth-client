@@ -12,11 +12,16 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { types } from '@/store';
 
 export default {
 	name: 'Header',
+	computed: {
+		...mapGetters({
+			getUserDetails: '',
+		}),
+	},
 	methods: {
 		...mapActions({
 			logout: types.auth.action.LOGOUT_USER,

@@ -2,7 +2,7 @@
   <div class="footer">
 		<v-footer class="pa-3" color="yellow">
 			<v-spacer></v-spacer>
-			<div>&copy; {{ new Date().getFullYear() }}</div>
+			<div>&copy; {{ new Date().getFullYear() }} by Oleksii Khlopotov</div>
 		</v-footer>
 	</div>
 </template>
