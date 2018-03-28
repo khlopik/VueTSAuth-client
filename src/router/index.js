@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
+import Main from '@/components/Main';
 import Posts from '@/components/Posts';
 import LoginPage from '@/components/LoginPage/LoginPage';
 import AdminPage from '@/components/AdminPage/AdminPage';
@@ -12,8 +12,11 @@ Vue.use(Router);
 const routes = [
 	{
 		path: '/',
-		name: 'HelloWorld',
-		component: HelloWorld,
+		name: 'Main',
+		component: Main,
+		meta: {
+			requiresAuth: true,
+		},
 	},
 	{
 		path: '/posts',
@@ -53,31 +56,15 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+	console.log('beforeEach in router');
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
 	if (to.meta.requiresAuth) {
 		if (!authUser || !authUser.token) {
-			localStorage.setItem('initialUserUrl', to.path);
+			console.log('authUser not found in localStorage');
+			// localStorage.setItem('initialUserUrl', to.path);
 			next({ name: 'login' });
 		} else {
-			authUserByToken(authUser.token)
-				.then(() => {
-					if (to.meta.adminAuth) {
-						if (authUser.access === 'Admin') {
-							next();
-						} else {
-							next('/resident');
-						}
-					} else if (to.meta.residentAuth) {
-						if (authUser.access === 'Resident') {
-							next();
-						} else {
-							next('/admin');
-						}
-					}
-				})
-				.catch(() => {
-					localStorage.removeItem('authUser');
-				});
+			next();
 		}
 	} else {
 		next();

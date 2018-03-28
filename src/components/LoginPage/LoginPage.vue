@@ -141,10 +141,11 @@ export default {
 			loginService(this.email, this.password)
 				.then(() => {
 					// console.log('result: ', result);
-					const url = localStorage.getItem('initialUserUrl');
-					if (url) {
-						this.$router.push(url);
-					}
+					// const url = localStorage.getItem('initialUserUrl');
+					// if (url) {
+					console.log('before router push');
+					this.$router.push('/');
+					// }
 				})
 				.catch(() => {
 				});
