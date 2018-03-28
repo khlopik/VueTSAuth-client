@@ -1,8 +1,8 @@
 <template>
 	<div class="main">
 		<Header />
-		<component :is="userComponent"/>
-		<Footer/>
+		<component class="content" :is="userComponent"/>
+		<Footer />
 	</div>
 </template>
 
@@ -77,5 +77,14 @@ export default {
 
 	a {
 		color: #42b983;
+	}
+	.main {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+	}
+	.content {
+		height: 90%;
 	}
 </style>

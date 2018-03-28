@@ -8,6 +8,7 @@ export const action = {
 	SET_LOGGED_IN: 'SET_LOGGED_IN',
 	SET_USER_URL: 'SET_USER_URL',
 	CHECK_LOGIN_ON_SERVER: 'CHECK_LOGIN_ON_SERVER',
+	LOGOUT_USER: 'LOGOUT_USER',
 };
 
 export const getter = {

@@ -30,4 +30,9 @@ export default {
 			commit(mutation.SET_LOGGED_IN, false);
 		}
 	},
+	[action.LOGOUT_USER]: ({ commit }) => {
+		localStorage.removeItem('authUser');
+		commit(mutation.SET_USER_ACCESS, '');
+		commit(mutation.SET_LOGGED_IN, false);
+	},
 };
