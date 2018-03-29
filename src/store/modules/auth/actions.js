@@ -1,4 +1,4 @@
-import { authUserByToken } from '@/components/LoginPage/loginService';
+import { authUserByToken, updateUserDetails } from '@/components/LoginPage/loginService';
 import { action, mutation } from './types';
 
 export default {
@@ -10,23 +10,18 @@ export default {
 	},
 	[action.CHECK_LOGIN_ON_SERVER]: ({ commit }) => {
 		const authUser = JSON.parse(localStorage.getItem('authUser'));
-		console.log('authUser: ', authUser);
 		if (authUser && authUser.token) {
-			console.log('token exists');
 			authUserByToken(authUser.token)
 				.then((result) => {
-					console.log('before dispatch mutation');
-					console.log('result: ', result.data);
+					// console.log('result.data: ', result.data);
 					commit(mutation.SET_LOGGED_IN, true);
-					commit(mutation.SET_USER_ACCESS, result.data.access);
+					commit(mutation.UPDATE_USER_DETAILS, result.data);
+					// commit(mutation.SET_USER_ACCESS, result.data.access);
 				})
 				.catch((e) => {
-					console.log('in catch statement');
-					console.log('e: ', e);
 					commit(mutation.SET_LOGGED_IN, false);
 				});
 		} else {
-			console.log('in else statement of checking localStorage');
 			commit(mutation.SET_LOGGED_IN, false);
 		}
 	},
@@ -34,5 +29,15 @@ export default {
 		localStorage.removeItem('authUser');
 		commit(mutation.SET_USER_ACCESS, '');
 		commit(mutation.SET_LOGGED_IN, false);
+	},
+	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({ commit, state }, details) => {
+		updateUserDetails(state.userId, details)
+			.then((result) => {
+				// console.log('result: ', result);
+				commit(mutation.UPDATE_USER_DETAILS, result.data);
+			})
+			.catch((error) => {
+				console.log('error: ', error);
+			});
 	},
 };

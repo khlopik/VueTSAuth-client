@@ -1,8 +1,10 @@
 <template>
 	<div class="main">
-		<Header />
-		<component class="content" :is="userComponent"/>
-		<Footer />
+		<v-app id="inspire">
+			<Header />
+			<component :is="userComponent"/>
+			<Footer />
+		</v-app>
 	</div>
 </template>
 
@@ -53,9 +55,6 @@ export default {
 	beforeMount() {
 		this.checkAuthorisation();
 	},
-	updated() {
-		console.log('this.isLoggedIn: ', this.isLoggedIn);
-	},
 };
 </script>
 
@@ -83,8 +82,5 @@ export default {
 		flex-direction: column;
 		width: 100%;
 		height: 100%;
-	}
-	.content {
-		height: 90%;
 	}
 </style>

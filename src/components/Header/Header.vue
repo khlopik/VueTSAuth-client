@@ -2,7 +2,7 @@
   <div class="header">
 		<v-toolbar color="yellow">
 			<v-toolbar-side-icon/>
-			<v-toolbar-title>Title</v-toolbar-title>
+			<v-toolbar-title>Vue Application + Node.js & MongoDB + Authorisation</v-toolbar-title>
 			<v-spacer/>
 			<v-toolbar-items class="hidden-sm-and-down">
 				<v-btn flat @click.native="logoutUser">Log out</v-btn>

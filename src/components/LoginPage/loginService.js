@@ -1,5 +1,12 @@
 import axios from 'axios';
-import config from '../../../config';
+import config from '@/../config';
+
+const authUser = JSON.parse(localStorage.getItem('authUser'))
+const header = {
+	headers: {
+		'x-auth': authUser ? authUser.token : '',
+	},
+};
 
 const loginService = (email, password) => (
 	new Promise((resolve, reject) => {
@@ -49,6 +56,7 @@ const authUserByToken = token => (
 			},
 		})
 			.then((result) => {
+				console.log('result.data: ', result.data);
 				resolve(result);
 			})
 			.catch((error) => {
@@ -58,8 +66,21 @@ const authUserByToken = token => (
 	})
 );
 
+const updateUserDetails = (userId, details) => (
+	new Promise((resolve, reject) => {
+		axios.patch(`${config.dev.APIENDPOINT}/users/${userId}`, details, header)
+			.then((result) => {
+				resolve(result);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+	})
+);
+
 export {
 	loginService,
 	createUser,
 	authUserByToken,
+	updateUserDetails,
 };

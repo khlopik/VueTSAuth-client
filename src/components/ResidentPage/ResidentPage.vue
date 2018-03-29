@@ -1,8 +1,13 @@
 <template>
   <div class="resident">
-		<h1>Hello on Resident page</h1>
-		<h3>Your e-mail: {{email}}</h3>
-		<user-details/>
+		<div class="resident-title">
+			<h1>Hello on Resident page</h1>
+		</div>
+		<div class="resident-details">
+			<h2>Your details:</h2>
+			<user-details class="resident-user"/>
+		</div>
+
 	</div>
 </template>
 
@@ -32,8 +37,33 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" type="text/scss" scoped>
 	.resident {
-		background: #ccc;
+		height: 90%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background: #eee;
+		&-title h1 {
+			padding-top: 25px;
+		}
+		&-details {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+			padding: 25px;
+			h2 {
+				padding-bottom: 25px;
+			}
+		}
+
+		&-user {
+			width: 40%;
+			min-width: 500px;
+			padding: 10px;
+			border-radius: 10px;
+			background: #ccc;
+		}
 	}
 </style>

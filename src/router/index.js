@@ -28,26 +28,26 @@ const routes = [
 		path: '/auth/login',
 		component: LoginPage,
 	},
-	{
-		name: 'admin',
-		path: '/admin',
-		component: AdminPage,
-		meta: {
-			requiresAuth: true,
-			adminAuth: true,
-			residentAuth: false,
-		},
-	},
-	{
-		name: 'resident',
-		path: '/resident',
-		component: ResidentPage,
-		meta: {
-			requiresAuth: true,
-			adminAuth: false,
-			residentAuth: true,
-		},
-	},
+	// {
+	// 	name: 'admin',
+	// 	path: '/admin',
+	// 	component: AdminPage,
+	// 	meta: {
+	// 		requiresAuth: true,
+	// 		adminAuth: true,
+	// 		residentAuth: false,
+	// 	},
+	// },
+	// {
+	// 	name: 'resident',
+	// 	path: '/resident',
+	// 	component: ResidentPage,
+	// 	meta: {
+	// 		requiresAuth: true,
+	// 		adminAuth: false,
+	// 		residentAuth: true,
+	// 	},
+	// },
 ];
 
 const router = new Router({
@@ -56,11 +56,11 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-	console.log('beforeEach in router');
+	// console.log('beforeEach in router');
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
 	if (to.meta.requiresAuth) {
 		if (!authUser || !authUser.token) {
-			console.log('authUser not found in localStorage');
+			// console.log('authUser not found in localStorage');
 			// localStorage.setItem('initialUserUrl', to.path);
 			next({ name: 'login' });
 		} else {
