@@ -6,6 +6,7 @@ import LoginPage from '@/components/LoginPage/LoginPage';
 import AdminPage from '@/components/AdminPage/AdminPage';
 import ResidentPage from '@/components/ResidentPage/ResidentPage';
 import { authUserByToken } from '@/components/LoginPage/loginService';
+import store, { types } from '@/store';
 
 Vue.use(Router);
 
@@ -56,7 +57,7 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-	// console.log('beforeEach in router');
+	store.dispatch(types.auth.action.CHECK_LOGIN_ON_SERVER);
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
 	if (to.meta.requiresAuth) {
 		if (!authUser || !authUser.token) {

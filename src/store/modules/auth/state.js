@@ -1,5 +1,4 @@
 export default {
-	token: undefined,
 	userId: null,
 	isLoggedIn: false,
 	userUrl: '',

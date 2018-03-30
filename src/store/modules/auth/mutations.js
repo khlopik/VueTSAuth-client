@@ -15,12 +15,11 @@ export default {
 		auth.userAccess = access;
 	},
 	[mutation.UPDATE_USER_DETAILS]: (auth, data) => {
-		console.log('before updating the store');
 		auth.userAccess = data.access;
 		auth.details.name = data.details.name;
 		auth.details.email = data.email;
 		auth.userId = data._id;
-		// auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
-		Vue.set(auth.details, 'avatar', `${config.dev.APIENDPOINT}/${data.details.avatar}`);
+		auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
+		// Vue.set(auth.details, 'avatar', `${config.dev.APIENDPOINT}/${data.details.avatar}`);
 	},
 };

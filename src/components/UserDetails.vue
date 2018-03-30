@@ -30,19 +30,21 @@
 			<v-layout row>
 				<v-flex xs4>
 					<v-subheader>Avatar:</v-subheader>
+					<label class="avatar-label">
+						<input
+							type="file"
+							name="file"
+							class="avatar-file"
+							@change="saveForm($event.target.files); accept='image/*'">
+						Load image
+					</label>
 				</v-flex>
 				<img :src="avatar" alt="avatar" class="user-avatar">
 			</v-layout>
 			<v-layout row>
-				<input type="file" name="file" @change="saveForm($event.target.files); accept='image/*'">
+
 			</v-layout>
 		</v-form>
-		<!--<form method="post" enctype="multipart/form-data">-->
-			<!--<input type="file" name="file" @change="saveForm($event.target.files); accept='image/*'">-->
-			<!--<v-btn color="success" type="file">Load Avatar</v-btn>-->
-			<!--<input type="submit" value="Submit">-->
-		<!--</form>-->
-
 		<v-btn color="success" @click="saveUserDetails">Save</v-btn>
 	</div>
 </template>
@@ -124,5 +126,19 @@ export default {
 	}
 	.user-avatar {
 		height: 150px;
+		border-radius: 50%;
+	}
+	.avatar-file {
+		display: none;
+	}
+	.avatar-label {
+		padding: 5px 16px;
+		border-radius: 3px;
+		background-color: #4caf50;
+		color: #fff;
+		text-transform: uppercase;
+		box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+		cursor: pointer;
+		font-weight: 400;
 	}
 </style>

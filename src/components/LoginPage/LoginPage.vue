@@ -153,6 +153,7 @@ export default {
 		createUser() {
 			createUser(this.email, this.password)
 				.then(() => {
+					this.$router.push('/');
 					// console.log('result: ', result);
 				})
 				.catch(() => {

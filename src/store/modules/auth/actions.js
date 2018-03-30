@@ -9,21 +9,24 @@ export default {
 		commit(mutation.SET_USER_URL, url);
 	},
 	[action.CHECK_LOGIN_ON_SERVER]: ({ commit }) => {
-		const authUser = JSON.parse(localStorage.getItem('authUser'));
-		if (authUser && authUser.token) {
-			authUserByToken(authUser.token)
-				.then((result) => {
-					// console.log('result.data: ', result.data);
-					commit(mutation.SET_LOGGED_IN, true);
-					commit(mutation.UPDATE_USER_DETAILS, result.data);
-					// commit(mutation.SET_USER_ACCESS, result.data.access);
-				})
-				.catch((e) => {
-					commit(mutation.SET_LOGGED_IN, false);
-				});
-		} else {
-			commit(mutation.SET_LOGGED_IN, false);
-		}
+		return new Promise((resolve, reject) => {
+			const authUser = JSON.parse(localStorage.getItem('authUser'));
+			if (authUser && authUser.token) {
+				authUserByToken(authUser.token)
+					.then((result) => {
+						commit(mutation.SET_LOGGED_IN, true);
+						commit(mutation.UPDATE_USER_DETAILS, result.data);
+						resolve();
+					})
+					.catch((e) => {
+						commit(mutation.SET_LOGGED_IN, false);
+						reject();
+					});
+			} else {
+				commit(mutation.SET_LOGGED_IN, false);
+				reject();
+			}
+		});
 	},
 	[action.LOGOUT_USER]: ({ commit }) => {
 		localStorage.removeItem('authUser');

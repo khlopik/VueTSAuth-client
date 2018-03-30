@@ -53,7 +53,10 @@ export default {
 		}),
 	},
 	beforeMount() {
-		this.checkAuthorisation();
+		this.checkAuthorisation()
+			.catch(() => {
+				this.$router.go();
+			});
 	},
 };
 </script>

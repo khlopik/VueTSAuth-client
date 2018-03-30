@@ -1,26 +1,32 @@
 import axios from 'axios';
 import config from '@/../config';
 
-const authUser = JSON.parse(localStorage.getItem('authUser'))
-const header = {
-	headers: {
-		'x-auth': authUser ? authUser.token : '',
-	},
+
+const header = () => {
+	const authUser = JSON.parse(localStorage.getItem('authUser'));
+	return {
+		headers: {
+			'x-auth':	authUser && authUser.token ? authUser.token : '',
+		},
+	};
+};
+
+const saveAuthUser = (result) => {
+	localStorage.setItem('authUser', JSON.stringify({
+		email: result.data.email,
+		token: result.headers['x-auth'],
+		access: result.data.access,
+	}));
 };
 
 const loginService = (email, password) => (
 	new Promise((resolve, reject) => {
-		// console.log('process.env.APIENDPOINT: ', config.dev.APIENDPOINT);
 		axios.post(`${config.dev.APIENDPOINT}/auth/login`, {
 			email,
 			password,
 		})
 			.then((result) => {
-				localStorage.setItem('authUser', JSON.stringify({
-					email: result.data.email,
-					token: result.headers['x-auth'],
-					access: result.data.access,
-				}));
+				saveAuthUser(result);
 				resolve(result.data);
 			})
 			.catch((error) => {
@@ -35,11 +41,7 @@ const createUser = (email, password) => (
 			password,
 		})
 			.then((result) => {
-				localStorage.setItem('authUser', JSON.stringify({
-					email: result.data.email,
-					token: result.headers['x-auth'],
-					access: result.data.access,
-				}));
+				saveAuthUser(result);
 				resolve(result.data);
 			})
 			.catch((error) => {
@@ -48,15 +50,11 @@ const createUser = (email, password) => (
 	})
 );
 
-const authUserByToken = token => (
+const authUserByToken = () => (
 	new Promise((resolve, reject) => {
-		axios.get(`${config.dev.APIENDPOINT}/auth/me`, {
-			headers: {
-				'x-auth': token,
-			},
-		})
+		axios.get(`${config.dev.APIENDPOINT}/auth/me`, header())
 			.then((result) => {
-				console.log('result.data: ', result.data);
+				// console.log('result.data: ', result.data);
 				resolve(result);
 			})
 			.catch((error) => {
@@ -68,7 +66,7 @@ const authUserByToken = token => (
 
 const updateUserDetails = (userId, details) => (
 	new Promise((resolve, reject) => {
-		axios.patch(`${config.dev.APIENDPOINT}/users/${userId}`, details, header)
+		axios.patch(`${config.dev.APIENDPOINT}/users/${userId}`, details, header())
 			.then((result) => {
 				resolve(result);
 			})
