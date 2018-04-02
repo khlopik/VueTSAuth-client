@@ -8,4 +8,5 @@ export default {
 		name: '',
 		avatar: null,
 	},
+	users: [],
 };

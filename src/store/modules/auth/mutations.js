@@ -2,6 +2,7 @@
 import config from '@/../config';
 import { mutation } from './types';
 import Vue from 'vue';
+import _ from 'lodash';
 
 
 export default {
@@ -24,5 +25,20 @@ export default {
 	},
 	[mutation.CLEAR_USER_AVATAR]: (auth) => {
 		auth.details.avatar = `${config.dev.APIENDPOINT}/images/unauth/unknown.png`;
+	},
+	[mutation.SAVE_USERS_TO_STORE]: (auth, users) => {
+		console.log('users: ', users);
+		auth.users = _.map(users, (user) => {
+			console.log('user: ', user);
+			const updatedUser = {
+				...user,
+				details: {
+					...user.details,
+					avatar: `${config.dev.APIENDPOINT}/${user.details.avatar}`,
+				}
+			};
+			console.log('updatedUser: ', updatedUser);
+			return updatedUser;
+		});
 	},
 };

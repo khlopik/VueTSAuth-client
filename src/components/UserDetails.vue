@@ -42,7 +42,7 @@
 						<v-btn color="warning" class="avatar-clear" @click="clearAvatar">Clear avatar</v-btn>
 					</div>
 				</v-flex>
-				<v-flex xs8>
+				<v-flex xs8 class="avatar-image">
 					<img :src="avatar" alt="avatar" class="user-avatar" ref="avatar">
 				</v-flex>
 			</v-layout>
@@ -50,8 +50,10 @@
 
 			</v-layout>
 		</v-form>
-		<v-btn color="error" @click="removeUserAccount(userDetails.id)">Delete account</v-btn>
-		<v-btn color="success" @click="saveUserDetails" :disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
+		<div class="form-buttons">
+			<v-btn color="error" @click="removeUserAccount(userDetails.id)">Delete account</v-btn>
+			<v-btn color="success" @click="saveUserDetails" :disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
+		</div>
 	</div>
 </template>
 
@@ -68,10 +70,17 @@ const STATUS_FAILED = 3;
 
 export default {
 	name: 'UserDetails',
+	props: {
+		userDetails: {
+			type: Object,
+			required: true,
+		},
+	},
 	data() {
 		return {
 			email: '',
 			name: '',
+			avatar: '',
 			avatarChanged: false,
 			savingStatus: STATUS_INITIAL,
 			formData: new FormData(),
@@ -79,8 +88,8 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			userDetails: types.auth.getter.GET_USER_DETAILS,
-			avatar: types.auth.getter.GET_USER_AVATAR,
+			// userDetails: types.auth.getter.GET_USER_DETAILS,
+			// avatar: types.auth.getter.GET_USER_AVATAR,
 		}),
 		isInitial() {
 			return this.savingStatus === STATUS_INITIAL;
@@ -135,10 +144,26 @@ export default {
 		},
 	},
 	mounted() {
-		this.name = this.userDetails.name;
-		this.email = this.userDetails.email;
-		console.log('this.userDetails: ', this.userDetails);
+		if (this.userDetails) {
+			console.log('this.userDetails: ', this.userDetails);
+			console.log('this.userDetails: ', this.userDetails);
+
+			this.name = this.userDetails.name;
+			this.email = this.userDetails.email;
+			this.avatar = this.userDetails.avatar;
+		}
+
 		// this.avatar = this.userDetails.avatar;
+	},
+	updated() {
+		// if (this.userDetails && this.userDetails.details) {
+		// 	console.log('this.userDetails: ', this.userDetails);
+		// 	console.log('this.userDetails: ', this.userDetails);
+    //
+		// 	this.name = this.userDetails.name;
+		// 	this.email = this.userDetails.email;
+		// 	this.avatar = this.userDetails.avatar;
+		// }
 	},
 };
 </script>
@@ -166,6 +191,7 @@ export default {
 		box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 		cursor: pointer;
 		font-weight: 400;
+		text-align: center;
 	}
 	.avatar-clear {
 		/*margin-top: 10px;*/
@@ -174,5 +200,13 @@ export default {
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
+	}
+	.avatar-image {
+		text-align: center;
+	}
+	.form-buttons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

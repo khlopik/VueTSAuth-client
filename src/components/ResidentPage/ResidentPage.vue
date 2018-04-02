@@ -5,7 +5,7 @@
 		</div>
 		<div class="resident-details">
 			<h2>Your details:</h2>
-			<user-details class="resident-user"/>
+			<user-details class="resident-user" :userDetails="userDetails"/>
 		</div>
 
 	</div>
@@ -14,6 +14,8 @@
 <script>
 import { authUserByToken } from '@/components/LoginPage/loginService';
 import UserDetails from '@/components/UserDetails';
+import { types } from '@/store';
+import { mapGetters } from 'vuex';
 
 export default {
 	name: 'resident-page',
@@ -24,6 +26,11 @@ export default {
 		return {
 			email: '',
 		};
+	},
+	computed: {
+		...mapGetters({
+			userDetails: types.auth.getter.GET_USER_DETAILS,
+		}),
 	},
 	mounted() {
 		authUserByToken(JSON.parse(localStorage.getItem('authUser')).token)

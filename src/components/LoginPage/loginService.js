@@ -11,6 +11,18 @@ const header = () => {
 	};
 };
 
+const getUsers = () => (
+	new Promise((resolve, reject) => {
+		axios.get(`${config.dev.APIENDPOINT}/users`, header())
+			.then((result) => {
+				resolve(result);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+	})
+);
+
 const saveAuthUser = (result) => {
 	localStorage.setItem('authUser', JSON.stringify({
 		email: result.data.email,
@@ -90,6 +102,7 @@ const removeUserAccount = (userId) => {
 
 export {
 	loginService,
+	getUsers,
 	createUser,
 	authUserByToken,
 	updateUserDetails,

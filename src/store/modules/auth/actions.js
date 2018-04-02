@@ -1,4 +1,4 @@
-import { authUserByToken, updateUserDetails, removeUserAccount } from '@/components/LoginPage/loginService';
+import { authUserByToken, updateUserDetails, removeUserAccount, getUsers } from '@/components/LoginPage/loginService';
 import { action, mutation } from './types';
 
 export default {
@@ -41,7 +41,7 @@ export default {
 				Promise.resolve();
 			})
 			.catch((error) => {
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				Promise.reject(error);
 			});
 	},
@@ -51,11 +51,22 @@ export default {
 	[action.REMOVE_USER_ACCOUNT]: ({}, userId) => {
 		return removeUserAccount(userId)
 			.then((result) => {
-				console.log('result: ', result);
+				// console.log('result: ', result);
 				Promise.resolve(result);
 			})
 			.catch((error) => {
 				Promise.reject(error);
+			});
+	},
+	[action.GET_USERS_FROM_SERVER]: ({ commit }) => {
+		console.log('getUsersFromServer');
+		getUsers()
+			.then((result) => {
+				// console.log('result: ', result.data);
+				commit(mutation.SAVE_USERS_TO_STORE, result.data);
+			})
+			.catch((error) => {
+				console.log('error: ', error);
 			});
 	},
 };
