@@ -50,6 +50,7 @@
 
 			</v-layout>
 		</v-form>
+		<v-btn color="error" @click="removeUserAccount(userDetails.id)">Delete account</v-btn>
 		<v-btn color="success" @click="saveUserDetails" :disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
 	</div>
 </template>
@@ -98,6 +99,7 @@ export default {
 		...mapActions({
 			updateDetails: types.auth.action.UPDATE_USER_DETAILS_ON_SERVER,
 			clearUserAvatar: types.auth.action.CLEAR_USER_AVATAR,
+			removeUserAccount: types.auth.action.REMOVE_USER_ACCOUNT,
 		}),
 		saveUserDetails() {
 			this.formData.append('name', this.name);
@@ -135,6 +137,7 @@ export default {
 	mounted() {
 		this.name = this.userDetails.name;
 		this.email = this.userDetails.email;
+		console.log('this.userDetails: ', this.userDetails);
 		// this.avatar = this.userDetails.avatar;
 	},
 };

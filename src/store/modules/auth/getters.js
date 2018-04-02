@@ -9,6 +9,7 @@ export default {
 		name: state.auth.details.name,
 		avatar: state.auth.details.avatar,
 		email: state.auth.details.email,
+		id: state.auth.userId,
 	}),
 	[getter.GET_USER_AVATAR]: state => (state.auth.details.avatar),
 };

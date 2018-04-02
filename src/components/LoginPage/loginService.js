@@ -76,9 +76,22 @@ const updateUserDetails = (userId, details) => (
 	})
 );
 
+const removeUserAccount = (userId) => {
+	return new Promise((resolve, reject) => {
+		axios.delete(`${config.dev.APIENDPOINT}/users/${userId}`, header())
+			.then((result) => {
+				resolve(result);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+	});
+};
+
 export {
 	loginService,
 	createUser,
 	authUserByToken,
 	updateUserDetails,
+	removeUserAccount,
 };

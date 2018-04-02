@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
 		<v-content>
-			<v-container fluid fill-height>
+			<v-container fluid fill-height @keyup.enter="newUser ? createUser() : loginUser()">
 				<v-layout align-center justify-center>
 					<v-flex xs12 sm8 md4>
 						<v-card class="elevation-12">
@@ -62,7 +62,7 @@
 								<v-spacer/>
 								<v-btn
 									color="primary"
-									@click.prevent.enter="newUser ? createUser() : loginUser()"
+									@click.prevent="newUser ? createUser() : loginUser()"
 									:disabled="$v.$invalid">
 									{{newUser ? 'Create' : 'Login'}}</v-btn>
 							</v-card-actions>
