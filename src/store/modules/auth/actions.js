@@ -34,13 +34,18 @@ export default {
 		commit(mutation.SET_LOGGED_IN, false);
 	},
 	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({ commit, state }, details) => {
-		updateUserDetails(state.userId, details)
+		return updateUserDetails(state.userId, details)
 			.then((result) => {
 				// console.log('result: ', result);
 				commit(mutation.UPDATE_USER_DETAILS, result.data);
+				Promise.resolve();
 			})
 			.catch((error) => {
 				console.log('error: ', error);
+				Promise.reject(error);
 			});
+	},
+	[action.CLEAR_USER_AVATAR]: ({ commit }) => {
+		commit(mutation.CLEAR_USER_AVATAR);
 	},
 };

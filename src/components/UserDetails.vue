@@ -30,22 +30,27 @@
 			<v-layout row>
 				<v-flex xs4>
 					<v-subheader>Avatar:</v-subheader>
-					<label class="avatar-label">
-						<input
-							type="file"
-							name="file"
-							class="avatar-file"
-							@change="saveForm($event.target.files); accept='image/*'">
-						Load image
-					</label>
+					<div class="avatar-buttons">
+						<label class="avatar-label">
+							<input
+								type="file"
+								name="file"
+								class="avatar-file"
+								@change="saveForm($event.target.files); accept='image/*'">
+							Load image
+						</label>
+						<v-btn color="warning" class="avatar-clear" @click="clearAvatar">Clear avatar</v-btn>
+					</div>
 				</v-flex>
-				<img :src="avatar" alt="avatar" class="user-avatar">
+				<v-flex xs8>
+					<img :src="avatar" alt="avatar" class="user-avatar" ref="avatar">
+				</v-flex>
 			</v-layout>
 			<v-layout row>
 
 			</v-layout>
 		</v-form>
-		<v-btn color="success" @click="saveUserDetails">Save</v-btn>
+		<v-btn color="success" @click="saveUserDetails" :disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
 	</div>
 </template>
 
@@ -66,8 +71,8 @@ export default {
 		return {
 			email: '',
 			name: '',
-			// avatar: '',
-			savingStatus: null,
+			avatarChanged: false,
+			savingStatus: STATUS_INITIAL,
 			formData: new FormData(),
 		};
 	},
@@ -92,29 +97,44 @@ export default {
 	methods: {
 		...mapActions({
 			updateDetails: types.auth.action.UPDATE_USER_DETAILS_ON_SERVER,
+			clearUserAvatar: types.auth.action.CLEAR_USER_AVATAR,
 		}),
 		saveUserDetails() {
 			this.formData.append('name', this.name);
 			// for (let pair of this.formData.entries()) {
 			// 	console.log(pair[0]+ ', ' + pair[1]);
 			// }
-			this.updateDetails(this.formData);
+			this.savingStatus = STATUS_SAVING;
+			this.updateDetails(this.formData)
+				.then(() => {
+					this.savingStatus = STATUS_SUCCESS;
+				})
+				.catch((error) => {
+					this.savingStatus = STATUS_FAILED;
+				});
 		},
 		saveForm(files) {
 			if (!files.length) return;
 			this.formData.append('avatar', files[0], files[0].name);
+			const reader = new FileReader();
+			const self = this;
+			reader.onload = (e) => {
+				self.$refs.avatar.src = e.target.result;
+			};
+			reader.readAsDataURL(files[0]);
+			this.savingStatus = STATUS_INITIAL;
+			this.avatarChanged = true;
+		},
+		clearAvatar() {
+			this.clearUserAvatar();
+			this.savingStatus = STATUS_INITIAL;
+			this.formData.append('avatar', '');
+			this.avatarChanged = true;
 		},
 	},
 	mounted() {
 		this.name = this.userDetails.name;
 		this.email = this.userDetails.email;
-		// this.avatar = this.userDetails.avatar;
-	},
-	beforeUpdate() {
-		console.log('beforeUpdate');
-	},
-	updated() {
-		console.log('this.userDetails.avatar: ', this.userDetails.avatar);
 		// this.avatar = this.userDetails.avatar;
 	},
 };
@@ -132,7 +152,10 @@ export default {
 		display: none;
 	}
 	.avatar-label {
-		padding: 5px 16px;
+		box-sizing: border-box;
+		margin: 8px;
+		display: block;
+		padding: 7px 16px;
 		border-radius: 3px;
 		background-color: #4caf50;
 		color: #fff;
@@ -140,5 +163,13 @@ export default {
 		box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 		cursor: pointer;
 		font-weight: 400;
+	}
+	.avatar-clear {
+		/*margin-top: 10px;*/
+	}
+	.avatar-buttons {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
 	}
 </style>

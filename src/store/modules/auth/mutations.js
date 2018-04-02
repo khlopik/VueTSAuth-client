@@ -22,4 +22,7 @@ export default {
 		auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
 		// Vue.set(auth.details, 'avatar', `${config.dev.APIENDPOINT}/${data.details.avatar}`);
 	},
+	[mutation.CLEAR_USER_AVATAR]: (auth) => {
+		auth.details.avatar = `${config.dev.APIENDPOINT}/images/unauth/unknown.png`;
+	},
 };
