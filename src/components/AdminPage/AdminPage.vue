@@ -1,7 +1,10 @@
 <template>
   <div class="admin">
-		<h1>Hello on Admin page</h1>
+		<div class="admin-title">
+			<h1>Hello on Admin page</h1>
+		</div>
 		<v-expansion-panel class="userlist" popout>
+			<h2>User list:</h2>
 			<v-expansion-panel-content v-for="user in users" :key="user.email" class="user-panel">
 				<div slot="header" class="user-header">{{user.email}}</div>
 				<user-details :userDetails="user" class="user-details"/>
@@ -36,6 +39,9 @@ export default {
 			console.log('this.users: ', this.users);
 		}, 1000);
 	},
+	updated() {
+		console.log('this.users: ', this.users);
+	},
 };
 </script>
 
@@ -46,9 +52,16 @@ export default {
 		align-items: center;
 		height: 90%;
 		background: #eee;
+		&-title {
+			padding-top: 25px;
+		}
 	}
 	.userlist {
 		width: 60%;
+		padding: 25px;
+		h2 {
+			padding-bottom: 25px;
+		}
 	}
 	.user-panel {
 		background: #F6C6CE;

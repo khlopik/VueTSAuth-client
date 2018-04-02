@@ -33,20 +33,22 @@ export default {
 		commit(mutation.SET_USER_ACCESS, '');
 		commit(mutation.SET_LOGGED_IN, false);
 	},
-	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({commit, state}, details) => {
-		return updateUserDetails(state.userId, details)
+	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({ commit }, { userId, details }) => {
+		console.log('userId inside actions: ', userId);
+		console.log('details inside details: ', details);
+		return updateUserDetails(userId, details)
 			.then((result) => {
-				// console.log('result: ', result);
+				console.log('result: ', result);
 				commit(mutation.UPDATE_USER_DETAILS, result.data);
 				Promise.resolve();
 			})
 			.catch((error) => {
-				// console.log('error: ', error);
+				console.log('error: ', error);
 				Promise.reject(error);
 			});
 	},
-	[action.CLEAR_USER_AVATAR]: ({commit}) => {
-		commit(mutation.CLEAR_USER_AVATAR);
+	[action.CLEAR_USER_AVATAR]: ({commit}, userId) => {
+		commit(mutation.CLEAR_USER_AVATAR, userId);
 	},
 	[action.REMOVE_USER_ACCOUNT]: ({}, userId) => {
 		return removeUserAccount(userId)

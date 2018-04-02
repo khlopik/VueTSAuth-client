@@ -78,11 +78,16 @@ const authUserByToken = () => (
 
 const updateUserDetails = (userId, details) => (
 	new Promise((resolve, reject) => {
+		console.log('hello inside api.js');
+		console.log('userId inside api.js: ', userId);
+		console.log('details: ', details);
 		axios.patch(`${config.dev.APIENDPOINT}/users/${userId}`, details, header())
 			.then((result) => {
+				console.log('result: ', result);
 				resolve(result);
 			})
 			.catch((error) => {
+				console.log('error: ', error);
 				reject(error);
 			});
 	})

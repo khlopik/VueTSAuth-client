@@ -1,9 +1,7 @@
 /* eslint no-param-reassign: "error" */
 import config from '@/../config';
-import { mutation } from './types';
-import Vue from 'vue';
 import _ from 'lodash';
-
+import { mutation } from './types';
 
 export default {
 	[mutation.SET_LOGGED_IN]: (auth, status) => {
@@ -16,6 +14,7 @@ export default {
 		auth.userAccess = access;
 	},
 	[mutation.UPDATE_USER_DETAILS]: (auth, data) => {
+		console.log('data: ', data);
 		auth.userAccess = data.access;
 		auth.details.name = data.details.name;
 		auth.details.email = data.email;
@@ -23,8 +22,29 @@ export default {
 		auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
 		// Vue.set(auth.details, 'avatar', `${config.dev.APIENDPOINT}/${data.details.avatar}`);
 	},
-	[mutation.CLEAR_USER_AVATAR]: (auth) => {
-		auth.details.avatar = `${config.dev.APIENDPOINT}/images/unauth/unknown.png`;
+	[mutation.CLEAR_USER_AVATAR]: (auth, userId) => {
+		if (!userId) {
+			auth.details.avatar = `${config.dev.APIENDPOINT}/images/unauth/unknown.png`;
+		} else {
+			if (userId === auth.userId) {
+				auth.details.avatar = `${config.dev.APIENDPOINT}/images/unauth/unknown.png`;
+			}
+			const result = _.map(auth.users, (user) => {
+				if (user._id === userId) {
+					return {
+						...user,
+						details: {
+							...user.details,
+							avatar: `${config.dev.APIENDPOINT}/images/unauth/unknown.png`,
+						},
+					}
+				} else {
+					return user;
+				}
+			});
+			auth.users = result;
+		}
+
 	},
 	[mutation.SAVE_USERS_TO_STORE]: (auth, users) => {
 		console.log('users: ', users);

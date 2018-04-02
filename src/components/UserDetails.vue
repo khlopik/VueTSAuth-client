@@ -52,7 +52,10 @@
 		</v-form>
 		<div class="form-buttons">
 			<v-btn color="error" @click="removeUserAccount(userDetails.id)">Delete account</v-btn>
-			<v-btn color="success" @click="saveUserDetails" :disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
+			<v-btn
+				color="success"
+				@click="saveUserDetails"
+				:disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
 		</div>
 	</div>
 </template>
@@ -89,7 +92,7 @@ export default {
 	computed: {
 		...mapGetters({
 			// userDetails: types.auth.getter.GET_USER_DETAILS,
-			// avatar: types.auth.getter.GET_USER_AVATAR,
+			// avatar: () => (types.auth.getter.GET_USER_AVATAR(this.userDetails)),
 		}),
 		isInitial() {
 			return this.savingStatus === STATUS_INITIAL;
@@ -115,12 +118,17 @@ export default {
 			// for (let pair of this.formData.entries()) {
 			// 	console.log(pair[0]+ ', ' + pair[1]);
 			// }
+			console.log('this.name: ', this.name);
+			console.log('this.formData: ', this.formData);
 			this.savingStatus = STATUS_SAVING;
-			this.updateDetails(this.formData)
+			this.updateDetails({
+				userId: this.userDetails.id,
+				details: this.formData
+			})
 				.then(() => {
 					this.savingStatus = STATUS_SUCCESS;
 				})
-				.catch((error) => {
+				.catch(() => {
 					this.savingStatus = STATUS_FAILED;
 				});
 		},
@@ -137,34 +145,25 @@ export default {
 			this.avatarChanged = true;
 		},
 		clearAvatar() {
-			this.clearUserAvatar();
+			this.clearUserAvatar(this.userDetails.id);
 			this.savingStatus = STATUS_INITIAL;
 			this.formData.append('avatar', '');
 			this.avatarChanged = true;
 		},
+		updateProps() {
+			if (this.userDetails) {
+				this.name = this.userDetails.name;
+				this.email = this.userDetails.email;
+				this.avatar = this.userDetails.avatar;
+			}
+		},
 	},
 	mounted() {
-		if (this.userDetails) {
-			console.log('this.userDetails: ', this.userDetails);
-			console.log('this.userDetails: ', this.userDetails);
-
-			this.name = this.userDetails.name;
-			this.email = this.userDetails.email;
-			this.avatar = this.userDetails.avatar;
-		}
-
-		// this.avatar = this.userDetails.avatar;
+		this.updateProps();
 	},
 	updated() {
-		// if (this.userDetails && this.userDetails.details) {
-		// 	console.log('this.userDetails: ', this.userDetails);
-		// 	console.log('this.userDetails: ', this.userDetails);
-    //
-		// 	this.name = this.userDetails.name;
-		// 	this.email = this.userDetails.email;
-		// 	this.avatar = this.userDetails.avatar;
-		// }
-	},
+		this.updateProps();
+	}
 };
 </script>
 
@@ -188,7 +187,8 @@ export default {
 		background-color: #4caf50;
 		color: #fff;
 		text-transform: uppercase;
-		box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+		box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),
+		0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 		cursor: pointer;
 		font-weight: 400;
 		text-align: center;
