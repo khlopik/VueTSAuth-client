@@ -14,8 +14,6 @@ export default {
 		auth.userAccess = access;
 	},
 	[mutation.UPDATE_USER_DETAILS]: (auth, { userId, data }) => {
-		console.log('data: ', data);
-		console.log('auth.userId: ', auth.userId);
 		if (!userId || (userId === auth.userId)) {
 			auth.userAccess = data.access;
 			auth.details.name = data.details.name;
@@ -77,5 +75,21 @@ export default {
 			// console.log('updatedUser: ', updatedUser);
 			return updatedUser;
 		});
+	},
+	[mutation.UPDATE_USER_ACCESS]: (auth, { userId, access }) => {
+		if (userId === auth.userId) {
+			auth.access = access;
+		} else {
+			auth.users = _.map(auth.users, (user) => {
+				if (user._id === userId) {
+					return {
+						...user,
+						access,
+					};
+				} else {
+					return user;
+				}
+			});
+		}
 	},
 };

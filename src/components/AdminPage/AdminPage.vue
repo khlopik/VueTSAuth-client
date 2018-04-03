@@ -6,7 +6,10 @@
 		<v-expansion-panel class="userlist" popout>
 			<h2>User list:</h2>
 			<v-expansion-panel-content v-for="user in users" :key="user.email" class="user-panel">
-				<div slot="header" class="user-header">{{user.email}}</div>
+				<div slot="header" class="user-header">
+					{{`${user.email}${user.id === userDetails.id ? ' (Current user)' : ''}`}}
+					<span :class="`user-access${user.access === 'Resident' ? '' : ' user-admin'}`">{{user.access}}</span>
+				</div>
 				<user-details :userDetails="user" class="user-details"/>
 			</v-expansion-panel-content>
 		</v-expansion-panel>
@@ -26,6 +29,7 @@ export default {
 	computed: {
 		...mapGetters({
 			users: types.auth.getter.GET_ALL_USERS,
+			userDetails: types.auth.getter.GET_USER_DETAILS,
 		}),
 	},
 	methods: {
@@ -65,6 +69,7 @@ export default {
 	}
 	.user-panel {
 		background: #F6C6CE;
+		min-width: 500px;
 	}
 	.user-details {
 		/*width: 40%;*/
@@ -72,6 +77,22 @@ export default {
 		padding: 10px;
 		/*border-radius: 10px;*/
 		background: #ccc;
+	}
+	.user-header {
+		position: relative;
+	}
+	.user-access {
+		overflow: hidden;
+		position: absolute;
+		padding: 2px 5px;
+		right: 10px;
+		color: #666;
+		background: #8bfff1;
+		border-radius: 7px;
+	}
+	.user-admin {
+		background: #ffc7f4;
+		font-weight: 800;
 	}
 
 </style>

@@ -32,7 +32,7 @@ export default {
 	computed: {
 		...mapGetters({
 			isLoggedIn: types.auth.getter.IS_LOGGED_IN,
-			userAccess: types.auth.getter.GET_USER_ROLE,
+			userAccess: types.auth.getter.GET_USER_ACCESS,
 		}),
 		userComponent() {
 			if (!this.isLoggedIn) {

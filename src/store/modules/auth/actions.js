@@ -1,4 +1,4 @@
-import { authUserByToken, updateUserDetails, removeUserAccount, getUsers } from '@/components/LoginPage/loginService';
+import { authUserByToken, updateUserDetails, removeUserAccount, getUsers, updateUserAccess } from '@/components/LoginPage/loginService';
 import { action, mutation } from './types';
 
 export default {
@@ -34,11 +34,8 @@ export default {
 		commit(mutation.SET_LOGGED_IN, false);
 	},
 	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({ commit }, { userId, details }) => {
-		console.log('userId inside actions: ', userId);
-		console.log('details inside details: ', details);
 		return updateUserDetails(userId, details)
 			.then((result) => {
-				console.log('result: ', result);
 				commit(mutation.UPDATE_USER_DETAILS, { userId, data: result.data });
 				Promise.resolve();
 			})
@@ -61,11 +58,19 @@ export default {
 			});
 	},
 	[action.GET_USERS_FROM_SERVER]: ({ commit }) => {
-		console.log('getUsersFromServer');
 		getUsers()
 			.then((result) => {
 				// console.log('result: ', result.data);
 				commit(mutation.SAVE_USERS_TO_STORE, result.data);
+			})
+			.catch((error) => {
+				console.log('error: ', error);
+			});
+	},
+	[action.UPDATE_USER_ACCESS]: ({ commit }, { userId, access }) => {
+		updateUserAccess(userId, access)
+			.then((result) => {
+				commit(mutation.UPDATE_USER_ACCESS, { userId, access: result.data.access })
 			})
 			.catch((error) => {
 				console.log('error: ', error);

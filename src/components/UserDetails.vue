@@ -54,6 +54,12 @@
 			</v-layout>
 		</v-form>
 		<div class="form-buttons">
+			<v-btn
+				color="info"
+				v-if="userAccess === 'Admin'"
+				@click="updateUserAccess({userId: userDetails.id, access: userDetails.access === 'Resident' ? 'Admin' : 'Resident'})">
+				{{userDetails.access === 'Resident' ? 'Set' : 'Remove'}} Admin rights
+			</v-btn>
 			<v-btn color="error" @click="removeUserAccount(userDetails.id)">Delete account</v-btn>
 			<v-btn
 				color="success"
@@ -94,6 +100,7 @@ export default {
 	},
 	computed: {
 		...mapGetters({
+			userAccess: types.auth.getter.GET_USER_ACCESS,
 			// userDetails: types.auth.getter.GET_USER_DETAILS,
 			// avatar: () => (types.auth.getter.GET_USER_AVATAR(this.userDetails)),
 		}),
@@ -119,6 +126,7 @@ export default {
 			updateDetails: types.auth.action.UPDATE_USER_DETAILS_ON_SERVER,
 			clearUserAvatar: types.auth.action.CLEAR_USER_AVATAR,
 			removeUserAccount: types.auth.action.REMOVE_USER_ACCOUNT,
+			updateUserAccess: types.auth.action.UPDATE_USER_ACCESS,
 		}),
 		saveUserDetails() {
 			this.formData.append('name', this.name);

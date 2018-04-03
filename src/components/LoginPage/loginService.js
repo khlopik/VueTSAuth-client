@@ -78,9 +78,9 @@ const authUserByToken = () => (
 
 const updateUserDetails = (userId, details) => (
 	new Promise((resolve, reject) => {
-		console.log('hello inside api.js');
-		console.log('userId inside api.js: ', userId);
-		console.log('details: ', details);
+		// console.log('hello inside api.js');
+		// console.log('userId inside api.js: ', userId);
+		// console.log('details: ', details);
 		axios.patch(`${config.dev.APIENDPOINT}/users/${userId}`, details, header())
 			.then((result) => {
 				console.log('result: ', result);
@@ -92,6 +92,21 @@ const updateUserDetails = (userId, details) => (
 			});
 	})
 );
+
+const updateUserAccess = (userId, access) => (
+	new Promise((resolve, reject) => {
+		axios.patch(`${config.dev.APIENDPOINT}/users/access/${userId}`, { access }, header())
+			.then((result) => {
+				console.log('result: ', result);
+				resolve(result);
+			})
+			.catch((error) => {
+				console.log('error: ', error);
+				reject(error);
+			});
+	})
+);
+
 
 const removeUserAccount = (userId) => {
 	return new Promise((resolve, reject) => {
@@ -111,5 +126,6 @@ export {
 	createUser,
 	authUserByToken,
 	updateUserDetails,
+	updateUserAccess,
 	removeUserAccount,
 };
