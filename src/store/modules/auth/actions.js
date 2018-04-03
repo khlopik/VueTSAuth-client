@@ -15,7 +15,7 @@ export default {
 				authUserByToken(authUser.token)
 					.then((result) => {
 						commit(mutation.SET_LOGGED_IN, true);
-						commit(mutation.UPDATE_USER_DETAILS, result.data);
+						commit(mutation.UPDATE_USER_DETAILS, { data: result.data });
 						resolve();
 					})
 					.catch((e) => {
@@ -39,7 +39,7 @@ export default {
 		return updateUserDetails(userId, details)
 			.then((result) => {
 				console.log('result: ', result);
-				commit(mutation.UPDATE_USER_DETAILS, result.data);
+				commit(mutation.UPDATE_USER_DETAILS, { userId, data: result.data });
 				Promise.resolve();
 			})
 			.catch((error) => {

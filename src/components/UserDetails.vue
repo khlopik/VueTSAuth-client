@@ -11,7 +11,8 @@
 						class="user-form-input"
 						name="email"
 						label="E-mail address"
-						v-model="email"
+						ref="email"
+						:value="userDetails.email"
 					/>
 				</v-flex>
 			</v-layout>
@@ -23,7 +24,9 @@
 					<v-text-field
 						name="name"
 						label="User name"
-						v-model="name"
+						ref="name"
+						:value="userDetails.name"
+						@input="inputChange($event)"
 					/>
 				</v-flex>
 			</v-layout>
@@ -43,7 +46,7 @@
 					</div>
 				</v-flex>
 				<v-flex xs8 class="avatar-image">
-					<img :src="avatar" alt="avatar" class="user-avatar" ref="avatar">
+					<img :src="userDetails.avatar" alt="avatar" class="user-avatar" ref="avatar">
 				</v-flex>
 			</v-layout>
 			<v-layout row>
@@ -55,7 +58,7 @@
 			<v-btn
 				color="success"
 				@click="saveUserDetails"
-				:disabled="!avatarChanged && !(name !== userDetails.name)">Save</v-btn>
+				:disabled="!formChanged">Save</v-btn>
 		</div>
 	</div>
 </template>
@@ -81,9 +84,9 @@ export default {
 	},
 	data() {
 		return {
-			email: '',
-			name: '',
-			avatar: '',
+			// email: '',
+			name: this.userDetails.name,
+			// avatar: '',
 			avatarChanged: false,
 			savingStatus: STATUS_INITIAL,
 			formData: new FormData(),
@@ -106,6 +109,10 @@ export default {
 		isFailed() {
 			return this.savingStatus === STATUS_FAILED;
 		},
+		formChanged() {
+			console.log('this.$refs.name: ', this.$refs.name);
+			return this.avatarChanged || (this.name !== this.userDetails.name);
+		},
 	},
 	methods: {
 		...mapActions({
@@ -115,18 +122,15 @@ export default {
 		}),
 		saveUserDetails() {
 			this.formData.append('name', this.name);
-			// for (let pair of this.formData.entries()) {
-			// 	console.log(pair[0]+ ', ' + pair[1]);
-			// }
-			console.log('this.name: ', this.name);
 			console.log('this.formData: ', this.formData);
 			this.savingStatus = STATUS_SAVING;
 			this.updateDetails({
 				userId: this.userDetails.id,
-				details: this.formData
+				details: this.formData,
 			})
 				.then(() => {
 					this.savingStatus = STATUS_SUCCESS;
+					this.avatarChanged = false;
 				})
 				.catch(() => {
 					this.savingStatus = STATUS_FAILED;
@@ -152,18 +156,30 @@ export default {
 		},
 		updateProps() {
 			if (this.userDetails) {
-				this.name = this.userDetails.name;
-				this.email = this.userDetails.email;
-				this.avatar = this.userDetails.avatar;
+				// this.name = this.userDetails.name;
+				// this.email = this.userDetails.email;
+				// this.avatar = this.userDetails.avatar;
 			}
+		},
+		inputChange($event) {
+			this.name = $event;
 		},
 	},
 	mounted() {
-		this.updateProps();
+		// this.updateProps();
+		setTimeout(() => {
+			console.log('this.$refs.name: ', this.$refs.name.value);
+			console.log('this.userDetails.name: ', this.userDetails.name);
+		}, 1000);
 	},
 	updated() {
-		this.updateProps();
-	}
+		console.log('updated');
+		setTimeout(() => {
+			console.log('this.$refs.name: ', this.$refs.name.value);
+			console.log('this.userDetails.name: ', this.userDetails.name);
+		}, 1000);
+		// this.updateProps();
+	},
 };
 </script>
 

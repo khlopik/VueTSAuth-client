@@ -13,14 +13,31 @@ export default {
 	[mutation.SET_USER_ACCESS]: (auth, access) => {
 		auth.userAccess = access;
 	},
-	[mutation.UPDATE_USER_DETAILS]: (auth, data) => {
+	[mutation.UPDATE_USER_DETAILS]: (auth, { userId, data }) => {
 		console.log('data: ', data);
-		auth.userAccess = data.access;
-		auth.details.name = data.details.name;
-		auth.details.email = data.email;
-		auth.userId = data._id;
-		auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
-		// Vue.set(auth.details, 'avatar', `${config.dev.APIENDPOINT}/${data.details.avatar}`);
+		console.log('auth.userId: ', auth.userId);
+		if (!userId || (userId === auth.userId)) {
+			auth.userAccess = data.access;
+			auth.details.name = data.details.name;
+			auth.details.email = data.email;
+			auth.userId = data._id;
+			auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
+		} else {
+			auth.users = _.map(auth.users, (user) => {
+				if (user._id === userId) {
+					return {
+						...user,
+						details: {
+							...user.details,
+							name: data.details.name,
+							avatar: `${config.dev.APIENDPOINT}/${data.details.avatar}`,
+						},
+					}
+				} else {
+					return user;
+				}
+			});
+		}
 	},
 	[mutation.CLEAR_USER_AVATAR]: (auth, userId) => {
 		if (!userId) {
@@ -47,17 +64,17 @@ export default {
 
 	},
 	[mutation.SAVE_USERS_TO_STORE]: (auth, users) => {
-		console.log('users: ', users);
+		// console.log('users: ', users);
 		auth.users = _.map(users, (user) => {
-			console.log('user: ', user);
+			// console.log('user: ', user);
 			const updatedUser = {
 				...user,
 				details: {
 					...user.details,
 					avatar: `${config.dev.APIENDPOINT}/${user.details.avatar}`,
-				}
+				},
 			};
-			console.log('updatedUser: ', updatedUser);
+			// console.log('updatedUser: ', updatedUser);
 			return updatedUser;
 		});
 	},
