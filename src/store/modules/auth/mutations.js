@@ -1,9 +1,15 @@
 /* eslint no-param-reassign: "error" */
-import config from '@/../config';
+// import config from '@/../config';
+import prod from '@/../config/prod.env';
+import dev from '@/../config/dev.env';
 import _ from 'lodash';
 import { mutation } from './types';
 
-const server = process.env.APIENDPOINT || `${location.protocol}//${location.hostname}:8081`;
+
+let server = dev.APIENDPOINT;
+if (process.env.NODE_ENV === 'production') {
+	server = prod.APIENDPOINT;
+}
 
 export default {
 	[mutation.SET_LOGGED_IN]: (auth, status) => {

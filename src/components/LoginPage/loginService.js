@@ -1,9 +1,17 @@
 import axios from 'axios';
-import config from '@/../config';
+import config from '@/../config/';
+import prod from '@/../config/prod.env';
+import dev from '@/../config/dev.env';
 
-console.log('config.APIENDPOINT: ', config);
-console.log('location: ', location);
-const server = process.env.APIENDPOINT || `${location.protocol}//${location.hostname}:8081`;
+// console.log('config: ', config);
+// console.log('prod: ', prod);
+// console.log('dev: ', dev);
+// console.log('process.env: ', process.env);
+let server = dev.APIENDPOINT;
+if (process.env.NODE_ENV === 'production') {
+	server = prod.APIENDPOINT;
+}
+
 console.log('server: ', server);
 
 const header = () => {
