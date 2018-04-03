@@ -15,12 +15,14 @@ import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import AdminPage from '@/components/AdminPage/AdminPage';
 import ResidentPage from '@/components/ResidentPage/ResidentPage';
+import UnauthorizedPage from '@/components/UnauthorizedPage/UnauthorizedPage';
 
 export default {
 	name: 'Main',
 	components: {
 		AdminPage,
 		ResidentPage,
+		UnauthorizedPage,
 		Header,
 		Footer,
 	},
@@ -36,7 +38,7 @@ export default {
 		}),
 		userComponent() {
 			if (!this.isLoggedIn) {
-				return '';
+				return 'UnauthorizedPage';
 			}
 			if (this.userAccess === 'Admin') {
 				return 'AdminPage';
@@ -55,7 +57,7 @@ export default {
 	beforeMount() {
 		this.checkAuthorisation()
 			.catch(() => {
-				this.$router.go();
+				// this.$router.go();
 			});
 	},
 };

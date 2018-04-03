@@ -5,7 +5,7 @@
 			<v-toolbar-title>Vue Application + Node.js & MongoDB + Authorisation</v-toolbar-title>
 			<v-spacer/>
 			<v-toolbar-items class="hidden-sm-and-down">
-				<v-btn flat @click.native="logoutUser">Log out</v-btn>
+				<v-btn flat @click.native="loginUser">{{isLoggedIn ? `Log out (${userDetails.name || userDetails.email})` : 'log in / Sign up'}}</v-btn>
 			</v-toolbar-items>
 		</v-toolbar>
 	</div>
@@ -19,16 +19,22 @@ export default {
 	name: 'Header',
 	computed: {
 		...mapGetters({
-			getUserDetails: '',
+			isLoggedIn: types.auth.getter.IS_LOGGED_IN,
+			userDetails: types.auth.getter.GET_USER_DETAILS,
 		}),
 	},
 	methods: {
 		...mapActions({
 			logout: types.auth.action.LOGOUT_USER,
 		}),
-		logoutUser() {
-			this.logout();
-			this.$router.go();
+		loginUser() {
+			if (this.isLoggedIn) {
+				this.logout();
+			} else {
+				this.$router.push('/auth/login');
+			}
+
+			// this.$router.go();
 		},
 	},
 };

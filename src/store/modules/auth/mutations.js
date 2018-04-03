@@ -14,28 +14,29 @@ export default {
 		auth.userAccess = access;
 	},
 	[mutation.UPDATE_USER_DETAILS]: (auth, { userId, data }) => {
+		console.log('update user details mutation starts');
 		if (!userId || (userId === auth.userId)) {
+			'userId is empty or it is current user'
 			auth.userAccess = data.access;
 			auth.details.name = data.details.name;
 			auth.details.email = data.email;
 			auth.userId = data._id;
 			auth.details.avatar = `${config.dev.APIENDPOINT}/${data.details.avatar}`;
-		} else {
-			auth.users = _.map(auth.users, (user) => {
-				if (user._id === userId) {
-					return {
-						...user,
-						details: {
-							...user.details,
-							name: data.details.name,
-							avatar: `${config.dev.APIENDPOINT}/${data.details.avatar}`,
-						},
-					}
-				} else {
-					return user;
-				}
-			});
 		}
+		auth.users = _.map(auth.users, (user) => {
+			if (user._id === userId) {
+				return {
+					...user,
+					details: {
+						...user.details,
+						name: data.details.name,
+						avatar: `${config.dev.APIENDPOINT}/${data.details.avatar}`,
+					},
+				}
+			} else {
+				return user;
+			}
+		});
 	},
 	[mutation.CLEAR_USER_AVATAR]: (auth, userId) => {
 		if (!userId) {

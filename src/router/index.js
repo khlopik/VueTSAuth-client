@@ -63,7 +63,8 @@ router.beforeEach((to, from, next) => {
 		if (!authUser || !authUser.token) {
 			// console.log('authUser not found in localStorage');
 			// localStorage.setItem('initialUserUrl', to.path);
-			next({ name: 'login' });
+			// next({ name: 'login' });
+			next();
 		} else {
 			next();
 		}
