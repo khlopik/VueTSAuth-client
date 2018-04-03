@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '@/../config';
+// import config from '@/../config';
 
 
 const header = () => {
@@ -13,11 +13,12 @@ const header = () => {
 
 const getUsers = () => (
 	new Promise((resolve, reject) => {
-		axios.get(`${config.dev.APIENDPOINT}/users`, header())
+		axios.get(`${window.location.origin}/users`, header())
 			.then((result) => {
 				resolve(result);
 			})
 			.catch((error) => {
+				console.log('error: ', error);
 				reject(error);
 			});
 	})
@@ -33,7 +34,8 @@ const saveAuthUser = (result) => {
 
 const loginService = (email, password) => (
 	new Promise((resolve, reject) => {
-		axios.post(`${config.dev.APIENDPOINT}/auth/login`, {
+		console.log('host', window.location.origin);
+		axios.post(`${window.location.origin}/auth/login`, {
 			email,
 			password,
 		})
@@ -42,13 +44,14 @@ const loginService = (email, password) => (
 				resolve(result.data);
 			})
 			.catch((error) => {
+				console.log('error: ', error);
 				reject(error);
 			});
 	}));
 
 const createUser = (email, password) => (
 	new Promise((resolve, reject) => {
-		axios.post(`${config.dev.APIENDPOINT}/users`, {
+		axios.post(`${window.location.origin}/users`, {
 			email,
 			password,
 		})
@@ -57,6 +60,7 @@ const createUser = (email, password) => (
 				resolve(result.data);
 			})
 			.catch((error) => {
+				console.log('error: ', error);
 				reject(error);
 			});
 	})
@@ -64,12 +68,13 @@ const createUser = (email, password) => (
 
 const authUserByToken = () => (
 	new Promise((resolve, reject) => {
-		axios.get(`${config.dev.APIENDPOINT}/auth/me`, header())
+		axios.get(`${window.location.origin}/auth/me`, header())
 			.then((result) => {
 				// console.log('result.data: ', result.data);
 				resolve(result);
 			})
 			.catch((error) => {
+				console.log('error: ', error);
 				localStorage.removeItem('authUser');
 				reject(error);
 			});
@@ -81,9 +86,9 @@ const updateUserDetails = (userId, details) => (
 		// console.log('hello inside api.js');
 		// console.log('userId inside api.js: ', userId);
 		// console.log('details: ', details);
-		axios.patch(`${config.dev.APIENDPOINT}/users/${userId}`, details, header())
+		axios.patch(`${window.location.origin}/users/${userId}`, details, header())
 			.then((result) => {
-				console.log('result: ', result);
+				// console.log('result: ', result);
 				resolve(result);
 			})
 			.catch((error) => {
@@ -95,9 +100,9 @@ const updateUserDetails = (userId, details) => (
 
 const updateUserAccess = (userId, access) => (
 	new Promise((resolve, reject) => {
-		axios.patch(`${config.dev.APIENDPOINT}/users/access/${userId}`, { access }, header())
+		axios.patch(`${window.location.origin}/users/access/${userId}`, { access }, header())
 			.then((result) => {
-				console.log('result: ', result);
+				// console.log('result: ', result);
 				resolve(result);
 			})
 			.catch((error) => {
@@ -110,11 +115,12 @@ const updateUserAccess = (userId, access) => (
 
 const removeUserAccount = (userId) => {
 	return new Promise((resolve, reject) => {
-		axios.delete(`${config.dev.APIENDPOINT}/users/${userId}`, header())
+		axios.delete(`${window.location.origin}/users/${userId}`, header())
 			.then((result) => {
 				resolve(result);
 			})
 			.catch((error) => {
+				console.log('error: ', error);
 				reject(error);
 			});
 	});

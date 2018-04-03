@@ -143,7 +143,7 @@ export default {
 					// console.log('result: ', result);
 					// const url = localStorage.getItem('initialUserUrl');
 					// if (url) {
-					console.log('before router push');
+					// console.log('before router push');
 					this.$router.push('/');
 					// }
 				})

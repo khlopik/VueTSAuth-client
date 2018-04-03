@@ -39,12 +39,6 @@ export default {
 	},
 	mounted() {
 		this.getUsers();
-		setTimeout(() => {
-			console.log('this.users: ', this.users);
-		}, 1000);
-	},
-	updated() {
-		console.log('this.users: ', this.users);
 	},
 };
 </script>

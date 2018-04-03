@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
-		APIENDPOINT: 'http://localhost:8081',
+		// APIENDPOINT: ,
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

@@ -117,7 +117,6 @@ export default {
 			return this.savingStatus === STATUS_FAILED;
 		},
 		formChanged() {
-			console.log('this.$refs.name: ', this.$refs.name);
 			return this.avatarChanged || (this.name !== this.userDetails.name);
 		},
 	},
@@ -162,31 +161,9 @@ export default {
 			this.formData.append('avatar', '');
 			this.avatarChanged = true;
 		},
-		updateProps() {
-			if (this.userDetails) {
-				// this.name = this.userDetails.name;
-				// this.email = this.userDetails.email;
-				// this.avatar = this.userDetails.avatar;
-			}
-		},
 		inputChange($event) {
 			this.name = $event;
 		},
-	},
-	mounted() {
-		// this.updateProps();
-		setTimeout(() => {
-			console.log('this.$refs.name: ', this.$refs.name.value);
-			console.log('this.userDetails.name: ', this.userDetails.name);
-		}, 1000);
-	},
-	updated() {
-		console.log('updated');
-		setTimeout(() => {
-			console.log('this.$refs.name: ', this.$refs.name.value);
-			console.log('this.userDetails.name: ', this.userDetails.name);
-		}, 1000);
-		// this.updateProps();
 	},
 };
 </script>

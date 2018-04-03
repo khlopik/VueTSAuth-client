@@ -26,7 +26,6 @@ export default {
 		// return state.auth.details.avatar;
 	},
 	[getter.GET_ALL_USERS]: state => {
-		console.log('run get all users getter');
 		const result = _.map(state.auth.users, user => {
 			return {
 				name: user.details.name,
