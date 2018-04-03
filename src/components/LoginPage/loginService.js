@@ -1,6 +1,10 @@
 import axios from 'axios';
-// import config from '@/../config';
+import config from '@/../config';
 
+console.log('config.APIENDPOINT: ', config);
+console.log('location: ', location);
+const server = process.env.APIENDPOINT || `${location.protocol}//${location.hostname}:8081`;
+console.log('server: ', server);
 
 const header = () => {
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
@@ -13,7 +17,7 @@ const header = () => {
 
 const getUsers = () => (
 	new Promise((resolve, reject) => {
-		axios.get(`${window.location.origin}/users`, header())
+		axios.get(`${server}/users`, header())
 			.then((result) => {
 				resolve(result);
 			})
@@ -34,8 +38,8 @@ const saveAuthUser = (result) => {
 
 const loginService = (email, password) => (
 	new Promise((resolve, reject) => {
-		console.log('host', window.location.origin);
-		axios.post(`${window.location.origin}/auth/login`, {
+		console.log('host', server);
+		axios.post(`${server}/auth/login`, {
 			email,
 			password,
 		})
@@ -51,7 +55,7 @@ const loginService = (email, password) => (
 
 const createUser = (email, password) => (
 	new Promise((resolve, reject) => {
-		axios.post(`${window.location.origin}/users`, {
+		axios.post(`${server}/users`, {
 			email,
 			password,
 		})
@@ -68,7 +72,7 @@ const createUser = (email, password) => (
 
 const authUserByToken = () => (
 	new Promise((resolve, reject) => {
-		axios.get(`${window.location.origin}/auth/me`, header())
+		axios.get(`${server}/auth/me`, header())
 			.then((result) => {
 				// console.log('result.data: ', result.data);
 				resolve(result);
@@ -86,7 +90,7 @@ const updateUserDetails = (userId, details) => (
 		// console.log('hello inside api.js');
 		// console.log('userId inside api.js: ', userId);
 		// console.log('details: ', details);
-		axios.patch(`${window.location.origin}/users/${userId}`, details, header())
+		axios.patch(`${server}/users/${userId}`, details, header())
 			.then((result) => {
 				// console.log('result: ', result);
 				resolve(result);
@@ -100,7 +104,7 @@ const updateUserDetails = (userId, details) => (
 
 const updateUserAccess = (userId, access) => (
 	new Promise((resolve, reject) => {
-		axios.patch(`${window.location.origin}/users/access/${userId}`, { access }, header())
+		axios.patch(`${server}/users/access/${userId}`, { access }, header())
 			.then((result) => {
 				// console.log('result: ', result);
 				resolve(result);
@@ -115,7 +119,7 @@ const updateUserAccess = (userId, access) => (
 
 const removeUserAccount = (userId) => {
 	return new Promise((resolve, reject) => {
-		axios.delete(`${window.location.origin}/users/${userId}`, header())
+		axios.delete(`${server}/users/${userId}`, header())
 			.then((result) => {
 				resolve(result);
 			})

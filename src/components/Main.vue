@@ -56,7 +56,8 @@ export default {
 	},
 	beforeMount() {
 		this.checkAuthorisation()
-			.catch(() => {
+			.catch((e) => {
+				console.log('e: ', e);
 				// this.$router.go();
 			});
 	},

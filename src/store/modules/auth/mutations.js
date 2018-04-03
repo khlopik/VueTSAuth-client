@@ -3,6 +3,8 @@ import config from '@/../config';
 import _ from 'lodash';
 import { mutation } from './types';
 
+const server = process.env.APIENDPOINT || `${location.protocol}//${location.hostname}:8081`;
+
 export default {
 	[mutation.SET_LOGGED_IN]: (auth, status) => {
 		auth.isLoggedIn = status;
@@ -19,7 +21,7 @@ export default {
 			auth.details.name = data.details.name;
 			auth.details.email = data.email;
 			auth.userId = data._id;
-			auth.details.avatar = `${window.location.origin}/${data.details.avatar}`;
+			auth.details.avatar = `${server}/${data.details.avatar}`;
 		}
 		auth.users = _.map(auth.users, (user) => {
 			if (user._id === userId) {
@@ -28,7 +30,7 @@ export default {
 					details: {
 						...user.details,
 						name: data.details.name,
-						avatar: `${window.location.origin}/${data.details.avatar}`,
+						avatar: `${server}/${data.details.avatar}`,
 					},
 				}
 			} else {
@@ -38,10 +40,10 @@ export default {
 	},
 	[mutation.CLEAR_USER_AVATAR]: (auth, userId) => {
 		if (!userId) {
-			auth.details.avatar = `${window.location.origin}/images/unauth/unknown.png`;
+			auth.details.avatar = `${server}/images/unauth/unknown.png`;
 		} else {
 			if (userId === auth.userId) {
-				auth.details.avatar = `${window.location.origin}/images/unauth/unknown.png`;
+				auth.details.avatar = `${server}/images/unauth/unknown.png`;
 			}
 			const result = _.map(auth.users, (user) => {
 				if (user._id === userId) {
@@ -49,7 +51,7 @@ export default {
 						...user,
 						details: {
 							...user.details,
-							avatar: `${window.location.origin}/images/unauth/unknown.png`,
+							avatar: `${server}/images/unauth/unknown.png`,
 						},
 					}
 				} else {
@@ -68,7 +70,7 @@ export default {
 				...user,
 				details: {
 					...user.details,
-					avatar: `${window.location.origin}/${user.details.avatar}`,
+					avatar: `${server}/${user.details.avatar}`,
 				},
 			};
 			// console.log('updatedUser: ', updatedUser);

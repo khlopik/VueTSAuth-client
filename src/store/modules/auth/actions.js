@@ -24,7 +24,7 @@ export default {
 					});
 			} else {
 				commit(mutation.SET_LOGGED_IN, false);
-				reject();
+				resolve();
 			}
 		});
 	},

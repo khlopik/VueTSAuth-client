@@ -22,7 +22,7 @@
 							</v-toolbar>
 							<v-card-text>
 								<v-form>
-									<v-radio-group :column="false" :row="true" v-model="newUser">
+									<v-radio-group :column="false" :row="true" v-model="newUser" @change="authFailed=false">
 										<v-radio label="Existing user" :value="false"/>
 										<v-radio label="New user" :value="true"/>
 									</v-radio-group>
@@ -32,7 +32,7 @@
 										label="Login"
 										type="text"
 										:error-messages="emailErrors"
-										@input="$v.email.$touch()"
+										@input="$v.email.$touch(); authFailed=false"
 										@blur="$v.email.$touch()"
 										v-model="email"/>
 									<v-text-field
@@ -42,7 +42,7 @@
 										id="password"
 										type="password"
 										:error-messages="passwordErrors"
-										@input="$v.password.$touch()"
+										@input="$v.password.$touch(); authFailed=false"
 										@blur="$v.password.$touch()"
 										v-model="password"/>
 									<v-text-field
@@ -50,7 +50,7 @@
 										prepend-icon="lock"
 										name="confirm-password"
 										label="Confirm password"
-										id="password"
+										id="password2"
 										type="password"
 										:error-messages="confirmPasswordErrors"
 										@input="$v.confirmPassword.$touch()"
@@ -87,6 +87,7 @@ export default {
 		password: '',
 		confirmPassword: '',
 		newUser: false,
+		authFailed: false,
 	}),
 	validations() {
 		let validation = {
@@ -126,6 +127,7 @@ export default {
 			if (!this.$v.password.$dirty) return errors;
 			!this.$v.password.required && errors.push('Password is required');
 			!this.$v.password.minLength && errors.push('Password should be at least 8 characters');
+			this.authFailed && errors.push('Username or password is incorrect!');
 			return errors;
 		},
 		confirmPasswordErrors() {
@@ -140,24 +142,18 @@ export default {
 		loginUser() {
 			loginService(this.email, this.password)
 				.then(() => {
-					// console.log('result: ', result);
-					// const url = localStorage.getItem('initialUserUrl');
-					// if (url) {
-					// console.log('before router push');
 					this.$router.push('/');
-					// }
 				})
 				.catch(() => {
+					this.authFailed = true;
 				});
 		},
 		createUser() {
 			createUser(this.email, this.password)
 				.then(() => {
 					this.$router.push('/');
-					// console.log('result: ', result);
 				})
 				.catch(() => {
-					// console.log('error: ', error);
 				});
 		},
 	},
