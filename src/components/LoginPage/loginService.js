@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 	server = prod.APIENDPOINT;
 }
 
-console.log('server: ', server);
+// console.log('server: ', server);
 
 const header = () => {
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
@@ -27,11 +27,11 @@ const getUsers = () => (
 	new Promise((resolve, reject) => {
 		axios.get(`${server}/users`, header())
 			.then((result) => {
-				resolve(result);
+				return resolve(result);
 			})
 			.catch((error) => {
 				console.log('error: ', error);
-				reject(error);
+				return reject(error);
 			});
 	})
 );
@@ -46,18 +46,22 @@ const saveAuthUser = (result) => {
 
 const loginService = (email, password) => (
 	new Promise((resolve, reject) => {
-		console.log('host', server);
+		// console.log('host', server);
 		axios.post(`${server}/auth/login`, {
 			email,
 			password,
 		})
 			.then((result) => {
 				saveAuthUser(result);
-				resolve(result.data);
+				return resolve(result.data);
 			})
 			.catch((error) => {
-				console.log('error: ', error);
-				reject(error);
+				if (!error.response) {
+					return reject(error);
+				}
+				// console.log('error.response: ', error.response);
+				// console.log('error: ', error);
+				return reject(error.response.status);
 			});
 	}));
 
@@ -69,11 +73,11 @@ const createUser = (email, password) => (
 		})
 			.then((result) => {
 				saveAuthUser(result);
-				resolve(result.data);
+				return resolve(result.data);
 			})
 			.catch((error) => {
 				console.log('error: ', error);
-				reject(error);
+				return reject(error);
 			});
 	})
 );
@@ -83,12 +87,12 @@ const authUserByToken = () => (
 		axios.get(`${server}/auth/me`, header())
 			.then((result) => {
 				// console.log('result.data: ', result.data);
-				resolve(result);
+				return resolve(result);
 			})
 			.catch((error) => {
 				console.log('error: ', error);
 				localStorage.removeItem('authUser');
-				reject(error);
+				return reject(error);
 			});
 	})
 );
@@ -101,11 +105,11 @@ const updateUserDetails = (userId, details) => (
 		axios.patch(`${server}/users/${userId}`, details, header())
 			.then((result) => {
 				// console.log('result: ', result);
-				resolve(result);
+				return resolve(result);
 			})
 			.catch((error) => {
 				console.log('error: ', error);
-				reject(error);
+				return reject(error);
 			});
 	})
 );
@@ -115,11 +119,11 @@ const updateUserAccess = (userId, access) => (
 		axios.patch(`${server}/users/access/${userId}`, { access }, header())
 			.then((result) => {
 				// console.log('result: ', result);
-				resolve(result);
+				return resolve(result);
 			})
 			.catch((error) => {
 				console.log('error: ', error);
-				reject(error);
+				return reject(error);
 			});
 	})
 );
@@ -129,11 +133,11 @@ const removeUserAccount = (userId) => {
 	return new Promise((resolve, reject) => {
 		axios.delete(`${server}/users/${userId}`, header())
 			.then((result) => {
-				resolve(result);
+				return resolve(result);
 			})
 			.catch((error) => {
 				console.log('error: ', error);
-				reject(error);
+				return reject(error);
 			});
 	});
 };

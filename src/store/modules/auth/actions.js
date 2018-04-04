@@ -16,15 +16,15 @@ export default {
 					.then((result) => {
 						commit(mutation.SET_LOGGED_IN, true);
 						commit(mutation.UPDATE_USER_DETAILS, { data: result.data });
-						resolve();
+						return resolve();
 					})
 					.catch((e) => {
 						commit(mutation.SET_LOGGED_IN, false);
-						reject();
+						return reject();
 					});
 			} else {
 				commit(mutation.SET_LOGGED_IN, false);
-				resolve();
+				return resolve();
 			}
 		});
 	},
@@ -37,11 +37,11 @@ export default {
 		return updateUserDetails(userId, details)
 			.then((result) => {
 				commit(mutation.UPDATE_USER_DETAILS, { userId, data: result.data });
-				Promise.resolve();
+				return Promise.resolve();
 			})
 			.catch((error) => {
 				console.log('error: ', error);
-				Promise.reject(error);
+				return Promise.reject(error);
 			});
 	},
 	[action.CLEAR_USER_AVATAR]: ({commit}, userId) => {
@@ -51,10 +51,10 @@ export default {
 		return removeUserAccount(userId)
 			.then((result) => {
 				// console.log('result: ', result);
-				Promise.resolve(result);
+				return Promise.resolve(result);
 			})
 			.catch((error) => {
-				Promise.reject(error);
+				return Promise.reject(error);
 			});
 	},
 	[action.GET_USERS_FROM_SERVER]: ({ commit }) => {

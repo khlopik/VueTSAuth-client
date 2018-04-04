@@ -57,10 +57,10 @@
 			<v-btn
 				color="info"
 				v-if="userAccess === 'Admin'"
-				@click="updateUserAccess({userId: userDetails.id, access: userDetails.access === 'Resident' ? 'Admin' : 'Resident'})">
+				@click="updateAccess">
 				{{userDetails.access === 'Resident' ? 'Set' : 'Remove'}} Admin rights
 			</v-btn>
-			<v-btn color="error" @click="removeUserAccount(userDetails.id)">Delete account</v-btn>
+			<v-btn color="error" @click="deleteAccount(userDetails.id)">Delete account</v-btn>
 			<v-btn
 				color="success"
 				@click="saveUserDetails"
@@ -101,7 +101,7 @@ export default {
 	computed: {
 		...mapGetters({
 			userAccess: types.auth.getter.GET_USER_ACCESS,
-			// userDetails: types.auth.getter.GET_USER_DETAILS,
+			currentUser: types.auth.getter.GET_USER_DETAILS,
 			// avatar: () => (types.auth.getter.GET_USER_AVATAR(this.userDetails)),
 		}),
 		isInitial() {
@@ -163,6 +163,32 @@ export default {
 		},
 		inputChange($event) {
 			this.name = $event;
+		},
+		deleteAccount(userId) {
+			this.removeUserAccount(userId)
+				.then((result) => {
+					if (userId === this.currentUser.id) {
+						this.$router.go();
+					}
+					console.log('result: ', result);
+				})
+				.catch((error) => {
+					console.log('error: ', error);
+				});
+		},
+		updateAccess() {
+			this.updateUserAccess({
+				userId: this.userDetails.id,
+				access: this.userDetails.access === 'Resident' ? 'Admin' : 'Resident',
+			})
+				.then(() => {
+					if (this.userDetails.id === this.currentUser.id) {
+						this.$router.go();
+					}
+				})
+				.catch((error) => {
+					console.log('error: ', error);
+				});
 		},
 	},
 };

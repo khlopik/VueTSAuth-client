@@ -22,7 +22,11 @@
 							</v-toolbar>
 							<v-card-text>
 								<v-form>
-									<v-radio-group :column="false" :row="true" v-model="newUser" @change="authFailed=false">
+									<v-radio-group
+										:column="false"
+										:row="true"
+										v-model="newUser"
+										@change="customError=''">
 										<v-radio label="Existing user" :value="false"/>
 										<v-radio label="New user" :value="true"/>
 									</v-radio-group>
@@ -32,7 +36,7 @@
 										label="Login"
 										type="text"
 										:error-messages="emailErrors"
-										@input="$v.email.$touch(); authFailed=false"
+										@input="$v.email.$touch(); customError=''"
 										@blur="$v.email.$touch()"
 										v-model="email"/>
 									<v-text-field
@@ -42,7 +46,7 @@
 										id="password"
 										type="password"
 										:error-messages="passwordErrors"
-										@input="$v.password.$touch(); authFailed=false"
+										@input="$v.password.$touch(); customError=''"
 										@blur="$v.password.$touch()"
 										v-model="password"/>
 									<v-text-field
@@ -87,7 +91,7 @@ export default {
 		password: '',
 		confirmPassword: '',
 		newUser: false,
-		authFailed: false,
+		customError: '',
 	}),
 	validations() {
 		let validation = {
@@ -127,7 +131,7 @@ export default {
 			if (!this.$v.password.$dirty) return errors;
 			!this.$v.password.required && errors.push('Password is required');
 			!this.$v.password.minLength && errors.push('Password should be at least 8 characters');
-			this.authFailed && errors.push('Username or password is incorrect!');
+			this.customError && errors.push(this.customError);
 			return errors;
 		},
 		confirmPasswordErrors() {
@@ -144,8 +148,12 @@ export default {
 				.then(() => {
 					this.$router.push('/');
 				})
-				.catch(() => {
-					this.authFailed = true;
+				.catch((status) => {
+					if (status === 401) {
+						this.customError = 'Username or password is incorrect!';
+					} else {
+						this.customError = 'Unknown network error';
+					}
 				});
 		},
 		createUser() {

@@ -31,7 +31,7 @@ export default {
 			if (this.isLoggedIn) {
 				this.logout();
 			} else {
-				this.$router.push('/auth/login');
+				this.$router.push('/login');
 			}
 
 			// this.$router.go();
