@@ -36,10 +36,13 @@ export default {
 	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({ commit }, { userId, details }) => {
 		return updateUserDetails(userId, details)
 			.then((result) => {
+				console.log('action in then before mutation');
+				console.log('result: ', result);
 				commit(mutation.UPDATE_USER_DETAILS, { userId, data: result.data });
 				return Promise.resolve();
 			})
 			.catch((error) => {
+				console.log('catch in action');
 				console.log('error: ', error);
 				return Promise.reject(error);
 			});

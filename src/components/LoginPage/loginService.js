@@ -7,10 +7,11 @@ import dev from '@/../config/dev.env';
 // console.log('prod: ', prod);
 // console.log('dev: ', dev);
 // console.log('process.env: ', process.env);
-let server = dev.APIENDPOINT;
-if (process.env.NODE_ENV === 'production') {
-	server = prod.APIENDPOINT;
-}
+// let server = dev.APIENDPOINT;
+// if (process.env.NODE_ENV === 'production') {
+// 	server = prod.APIENDPOINT;
+// }
+export const server = process.env.NODE_ENV === 'production' ? prod.APIENDPOINT : dev.APIENDPOINT;
 
 // console.log('server: ', server);
 
@@ -105,9 +106,12 @@ const updateUserDetails = (userId, details) => (
 		axios.patch(`${server}/users/${userId}`, details, header())
 			.then((result) => {
 				// console.log('result: ', result);
+				console.log('api ok');
+				console.log('result: ', result);
 				return resolve(result);
 			})
 			.catch((error) => {
+				console.log('api failed');
 				console.log('error: ', error);
 				return reject(error);
 			});

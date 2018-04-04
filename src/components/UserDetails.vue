@@ -128,8 +128,9 @@ export default {
 			updateUserAccess: types.auth.action.UPDATE_USER_ACCESS,
 		}),
 		saveUserDetails() {
-			this.formData.append('name', this.name);
-			console.log('this.formData: ', this.formData);
+			if (this.name !== this.userDetails.name) {
+				this.formData.append('name', this.name);
+			}
 			this.savingStatus = STATUS_SAVING;
 			this.updateDetails({
 				userId: this.userDetails.id,
@@ -138,9 +139,11 @@ export default {
 				.then(() => {
 					this.savingStatus = STATUS_SUCCESS;
 					this.avatarChanged = false;
+					this.formData = new FormData();
 				})
 				.catch(() => {
 					this.savingStatus = STATUS_FAILED;
+					this.formData = new FormData();
 				});
 		},
 		saveForm(files) {
