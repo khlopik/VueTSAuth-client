@@ -1,9 +1,11 @@
 <template>
-	<div class="main">
+	<div>
 		<v-app id="inspire">
-			<Header />
-			<component :is="userComponent"/>
-			<Footer />
+			<div class="main">
+				<Header class="header"/>
+				<component :is="userComponent" class="content"/>
+				<Footer class="footer"/>
+			</div>
 		</v-app>
 	</div>
 </template>
@@ -83,10 +85,28 @@ export default {
 	a {
 		color: #42b983;
 	}
+
+	.main::-webkit-scrollbar {
+		display: none;
+	}
 	.main {
+		position: relative;
+		overflow: hidden;
+		overflow-y:hidden;
 		display: flex;
 		flex-direction: column;
+		height: 100vh;
 		width: 100%;
-		height: 100%;
+		box-sizing: border-box;
+	}
+	.header, .footer {
+		height: 5vh;
+		min-height: 36px;
+	}
+	.content {
+		/*height: 90vh;*/
+		overflow: scroll;
+		overflow-x: hidden;
+		flex-shrink: initial;
 	}
 </style>

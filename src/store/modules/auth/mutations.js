@@ -22,7 +22,6 @@ export default {
 		auth.userAccess = access;
 	},
 	[mutation.UPDATE_USER_DETAILS]: (auth, { userId, data }) => {
-		console.log('data: ', data);
 		if (!userId || (userId === auth.userId)) {
 			auth.userAccess = data.access;
 			auth.details.name = data.details.name;

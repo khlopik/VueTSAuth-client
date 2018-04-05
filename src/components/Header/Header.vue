@@ -1,13 +1,10 @@
 <template>
   <div class="header">
-		<v-toolbar color="yellow">
-			<v-toolbar-side-icon/>
-			<v-toolbar-title>Vue Application + Node.js & MongoDB + Authorisation</v-toolbar-title>
-			<v-spacer/>
-			<v-toolbar-items class="hidden-sm-and-down">
-				<v-btn flat @click.native="loginUser">{{isLoggedIn ? `Log out (${userDetails.name || userDetails.email})` : 'log in / Sign up'}}</v-btn>
-			</v-toolbar-items>
-		</v-toolbar>
+		<v-toolbar-side-icon class="header-icon"/>
+		<h1 class="header-title">Vue Application + Node.js & MongoDB + Authorization</h1>
+		<button @click="loginUser" class="header-login">
+			{{isLoggedIn ? `Log out (${userDetails.name || userDetails.email})` : 'log in / Sign up'}}
+		</button>
 	</div>
 </template>
 
@@ -41,8 +38,30 @@ export default {
 </script>
 
 <style lang="scss" type="text/scss" scoped>
-	/*.header {*/
-		/*height: 5%;*/
-		/*background: yellow;*/
-	/*}*/
+	.header {
+		display: flex;
+		position: relative;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		background: #ffeb3b;
+		&-icon {
+			flex-shrink: 1;
+		}
+		&-title {
+			overflow: hidden;
+			padding: 0 10px;
+			flex-grow: 1;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-size: 18px;
+			text-align: left;
+		}
+		&-login {
+			padding: 0 10px;
+			text-transform: uppercase;
+			font-weight: 800;
+			white-space: nowrap;
+		}
+	}
 </style>

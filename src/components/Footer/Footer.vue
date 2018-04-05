@@ -1,9 +1,6 @@
 <template>
   <div class="footer">
-		<v-footer class="pa-3" color="yellow">
-			<v-spacer></v-spacer>
-			<div>&copy; {{ new Date().getFullYear() }} by Oleksii Khlopotov</div>
-		</v-footer>
+		<div class="footer-copyright">&copy; {{ new Date().getFullYear() }} by Oleksii Khlopotov</div>
 	</div>
 </template>
 
@@ -13,12 +10,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" type="text/scss" scoped>
 	.footer {
-		position: fixed;
-		left: 0;
-		bottom: 0;
+		display: flex;
 		width: 100%;
-		text-align: center;
+		background: #ffeb3b;
+		justify-content: flex-end;
+		&-copyright {
+			display: inline-block;
+			padding-right: 10px;
+		}
 	}
 </style>

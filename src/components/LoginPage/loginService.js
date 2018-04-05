@@ -3,14 +3,6 @@ import config from '@/../config/';
 import prod from '@/../config/prod.env';
 import dev from '@/../config/dev.env';
 
-// console.log('config: ', config);
-// console.log('prod: ', prod);
-// console.log('dev: ', dev);
-// console.log('process.env: ', process.env);
-// let server = dev.APIENDPOINT;
-// if (process.env.NODE_ENV === 'production') {
-// 	server = prod.APIENDPOINT;
-// }
 export const server = process.env.NODE_ENV === 'production' ? prod.APIENDPOINT : dev.APIENDPOINT;
 
 // console.log('server: ', server);
@@ -31,7 +23,7 @@ const getUsers = () => (
 				return resolve(result);
 			})
 			.catch((error) => {
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				return reject(error);
 			});
 	})
@@ -77,7 +69,7 @@ const createUser = (email, password) => (
 				return resolve(result.data);
 			})
 			.catch((error) => {
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				return reject(error);
 			});
 	})
@@ -91,7 +83,7 @@ const authUserByToken = () => (
 				return resolve(result);
 			})
 			.catch((error) => {
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				localStorage.removeItem('authUser');
 				return reject(error);
 			});
@@ -100,19 +92,13 @@ const authUserByToken = () => (
 
 const updateUserDetails = (userId, details) => (
 	new Promise((resolve, reject) => {
-		// console.log('hello inside api.js');
-		// console.log('userId inside api.js: ', userId);
-		// console.log('details: ', details);
 		axios.patch(`${server}/users/${userId}`, details, header())
 			.then((result) => {
 				// console.log('result: ', result);
-				console.log('api ok');
-				console.log('result: ', result);
 				return resolve(result);
 			})
 			.catch((error) => {
-				console.log('api failed');
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				return reject(error);
 			});
 	})
@@ -126,7 +112,7 @@ const updateUserAccess = (userId, access) => (
 				return resolve(result);
 			})
 			.catch((error) => {
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				return reject(error);
 			});
 	})
@@ -140,7 +126,7 @@ const removeUserAccount = (userId) => {
 				return resolve(result);
 			})
 			.catch((error) => {
-				console.log('error: ', error);
+				// console.log('error: ', error);
 				return reject(error);
 			});
 	});
