@@ -79,7 +79,7 @@ const authUserByToken = () => (
 	new Promise((resolve, reject) => {
 		axios.get(`${server}/auth/me`, header())
 			.then((result) => {
-				// console.log('result.data: ', result.data);
+				console.log('result.data: ', result.data);
 				return resolve(result);
 			})
 			.catch((error) => {

@@ -16,6 +16,7 @@ export default {
 					.then((result) => {
 						commit(mutation.SET_LOGGED_IN, true);
 						commit(mutation.UPDATE_USER_DETAILS, { data: result.data });
+						commit(mutation.SET_DEFAULT_AVATAR, result.data.defaultAvatar);
 						return resolve();
 					})
 					.catch((e) => {

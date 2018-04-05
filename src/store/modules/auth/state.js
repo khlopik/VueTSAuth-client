@@ -3,6 +3,7 @@ export default {
 	isLoggedIn: false,
 	userUrl: '',
 	userAccess: '',
+	defaultAvatar: '',
 	details: {
 		email: null,
 		name: '',

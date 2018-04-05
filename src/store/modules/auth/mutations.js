@@ -31,12 +31,14 @@ export default {
 		}
 		auth.users = _.map(auth.users, (user) => {
 			if (user._id === userId) {
+				console.log('user: ', user);
+				console.log('data.details: ', data.details);
 				return {
 					...user,
 					details: {
 						...user.details,
 						name: data.details.name,
-						avatar: `${server}/${data.details.avatar}`,
+						avatar: data.details.avatar !== '' ? `${server}/${data.details.avatar}` : '',
 					},
 				}
 			} else {
@@ -46,10 +48,10 @@ export default {
 	},
 	[mutation.CLEAR_USER_AVATAR]: (auth, userId) => {
 		if (!userId) {
-			auth.details.avatar = `${server}/images/unauth/unknown.png`;
+			auth.details.avatar = '';
 		} else {
 			if (userId === auth.userId) {
-				auth.details.avatar = `${server}/images/unauth/unknown.png`;
+				auth.details.avatar = '';
 			}
 			const result = _.map(auth.users, (user) => {
 				if (user._id === userId) {
@@ -57,9 +59,9 @@ export default {
 						...user,
 						details: {
 							...user.details,
-							avatar: `${server}/images/unauth/unknown.png`,
+							avatar: '',
 						},
-					}
+					};
 				} else {
 					return user;
 				}
@@ -76,7 +78,7 @@ export default {
 				...user,
 				details: {
 					...user.details,
-					avatar: `${server}/${user.details.avatar}`,
+					avatar: user.details.avatar !== '' ? `${server}/${user.details.avatar}` : '',
 				},
 			};
 			// console.log('updatedUser: ', updatedUser);
@@ -98,5 +100,8 @@ export default {
 				}
 			});
 		}
+	},
+	[mutation.SET_DEFAULT_AVATAR]: (auth, avatar) => {
+		auth.defaultAvatar = `${server}/${avatar}`;
 	},
 };

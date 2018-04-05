@@ -34,19 +34,21 @@
 				<v-flex xs4>
 					<v-subheader>Avatar:</v-subheader>
 					<div class="avatar-buttons">
-						<label class="avatar-label">
+						<label :class="`avatar-label${isSaving ? ' disabled' : ''}`">
 							<input
 								type="file"
 								name="file"
 								class="avatar-file"
+								ref="updatedAvatar"
+								:disabled="isSaving"
 								@change="saveForm($event.target.files); accept='image/*'">
 							Load image
 						</label>
-						<v-btn color="warning" class="avatar-clear" @click="clearAvatar">Clear avatar</v-btn>
+						<v-btn color="warning" class="avatar-clear" @click="clearAvatar" :disabled="(!userDetails.avatar && !newAvatar) || isSaving">Clear avatar</v-btn>
 					</div>
 				</v-flex>
 				<v-flex xs8 class="avatar-image">
-					<img :src="userDetails.avatar" alt="avatar" class="user-avatar" ref="avatar">
+					<img :src="newAvatar || userDetails.avatar || defaultAvatar" alt="avatar" class="user-avatar" ref="avatar">
 				</v-flex>
 			</v-layout>
 			<v-layout row>
@@ -64,7 +66,7 @@
 			<v-btn
 				color="success"
 				@click="saveUserDetails"
-				:disabled="!formChanged">Save</v-btn>
+				:disabled="!formChanged || isSaving">Save</v-btn>
 		</div>
 	</div>
 </template>
@@ -90,10 +92,8 @@ export default {
 	},
 	data() {
 		return {
-			// email: '',
 			name: this.userDetails.name,
-			// avatar: '',
-			avatarChanged: false,
+			newAvatar: '',
 			savingStatus: STATUS_INITIAL,
 			formData: new FormData(),
 		};
@@ -102,7 +102,7 @@ export default {
 		...mapGetters({
 			userAccess: types.auth.getter.GET_USER_ACCESS,
 			currentUser: types.auth.getter.GET_USER_DETAILS,
-			// avatar: () => (types.auth.getter.GET_USER_AVATAR(this.userDetails)),
+			defaultAvatar: types.auth.getter.GET_DEFAULT_AVATAR,
 		}),
 		isInitial() {
 			return this.savingStatus === STATUS_INITIAL;
@@ -117,7 +117,7 @@ export default {
 			return this.savingStatus === STATUS_FAILED;
 		},
 		formChanged() {
-			return this.avatarChanged || (this.name !== this.userDetails.name);
+			return (this.name !== this.userDetails.name) || this.newAvatar || this.formData.has('avatar');
 		},
 	},
 	methods: {
@@ -138,8 +138,8 @@ export default {
 			})
 				.then(() => {
 					this.savingStatus = STATUS_SUCCESS;
-					this.avatarChanged = false;
 					this.formData = new FormData();
+					this.newAvatar = '';
 				})
 				.catch(() => {
 					this.savingStatus = STATUS_FAILED;
@@ -148,21 +148,22 @@ export default {
 		},
 		saveForm(files) {
 			if (!files.length) return;
+			this.formData.delete('avatar');
 			this.formData.append('avatar', files[0], files[0].name);
 			const reader = new FileReader();
 			const self = this;
 			reader.onload = (e) => {
-				self.$refs.avatar.src = e.target.result;
+				self.newAvatar = e.target.result;
 			};
 			reader.readAsDataURL(files[0]);
 			this.savingStatus = STATUS_INITIAL;
-			this.avatarChanged = true;
 		},
 		clearAvatar() {
+			this.newAvatar = '';
+			this.$refs.updatedAvatar.value = '';
 			this.clearUserAvatar(this.userDetails.id);
 			this.savingStatus = STATUS_INITIAL;
 			this.formData.append('avatar', '');
-			this.avatarChanged = true;
 		},
 		inputChange($event) {
 			this.name = $event;
@@ -223,9 +224,6 @@ export default {
 		font-weight: 400;
 		text-align: center;
 	}
-	.avatar-clear {
-		/*margin-top: 10px;*/
-	}
 	.avatar-buttons {
 		display: flex;
 		flex-direction: column;
@@ -238,5 +236,9 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.disabled {
+		background: #b3b3b3;
+		color: #8b8b8b;
 	}
 </style>

@@ -37,4 +37,5 @@ export default {
 		});
 		return result;
 	},
+	[getter.GET_DEFAULT_AVATAR]: state => (state.auth.defaultAvatar),
 };
