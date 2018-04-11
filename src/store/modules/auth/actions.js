@@ -21,7 +21,7 @@ export default {
 					})
 					.catch((e) => {
 						commit(mutation.SET_LOGGED_IN, false);
-						return reject();
+						return reject(e);
 					});
 			} else {
 				commit(mutation.SET_LOGGED_IN, false);

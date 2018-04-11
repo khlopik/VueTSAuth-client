@@ -27,7 +27,7 @@ export default {
 			auth.details.name = data.details.name;
 			auth.details.email = data.email;
 			auth.userId = data._id;
-			auth.details.avatar = `${server}/${data.details.avatar}`;
+			auth.details.avatar = data.details.avatar !== '' ? `${server}/${data.details.avatar}` : '';
 		}
 		auth.users = _.map(auth.users, (user) => {
 			if (user._id === userId) {
