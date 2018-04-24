@@ -2,6 +2,18 @@ import { authUserByToken, updateUserDetails, removeUserAccount, getUsers, update
 import { action, mutation } from './types';
 
 export default {
+	[action.REQUEST_HOST_ADDRESS]: ({commit}) => {
+		let host;
+		if (location.host.includes('localhost')) {
+			console.log('This is Development mode');
+			host = `${location.protocol}//${location.hostname}:8081`;
+		} else {
+			console.log('This is Production mode');
+			host = `${location.protocol}//${location.hostname}`;
+		}
+		console.log('host: ', host);
+		commit(mutation.SET_HOST_ADDRESS, host);
+	},
 	[action.SET_LOGGED_IN]: ({commit}, status) => {
 		commit(mutation.SET_LOGGED_IN, status);
 	},

@@ -4,5 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-	APIENDPOINT: "http://localhost:8081"
+	APIENDPOINT: "\"http://localhost:8081\""
 })

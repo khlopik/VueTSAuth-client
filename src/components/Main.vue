@@ -54,9 +54,14 @@ export default {
 	methods: {
 		...mapActions({
 			checkAuthorisation: types.auth.action.CHECK_LOGIN_ON_SERVER,
+			requestHostAddress: types.auth.action.REQUEST_HOST_ADDRESS,
 		}),
 	},
 	beforeMount() {
+		console.log('beforeMount in Main');
+		// this.requestHostAddress();
+		// const env = '' + process.env.APIENDPOINT;
+		// console.log('process.env.NODE_ENV: ', `${process.env.APIENDPOINT}`);
 		this.checkAuthorisation()
 			.catch((e) => {
 				console.log('e: ', e);

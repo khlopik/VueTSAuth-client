@@ -14,10 +14,16 @@ Vue.use(Vuetify);
 Vue.use(Vuelidate);
 
 /* eslint-disable no-new */
-new Vue({
+const vm = new Vue({
 	store,
 	el: '#app',
 	router,
 	components: { App },
 	template: '<App/>',
+	beforeCreate() {
+		store.dispatch('REQUEST_HOST_ADDRESS')
+			.catch((error) => {
+				console.log('error: ', error);
+			});
+	},
 });

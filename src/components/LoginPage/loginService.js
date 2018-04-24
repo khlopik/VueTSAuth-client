@@ -2,11 +2,22 @@ import axios from 'axios';
 import config from '@/../config/';
 import prod from '@/../config/prod.env';
 import dev from '@/../config/dev.env';
+import store from '@/store';
 
-export const server = process.env.NODE_ENV === 'production' ? prod.APIENDPOINT : dev.APIENDPOINT;
+// const webpackConfig = require('../../../build/webpack.prod.conf');
+// import { webpackConfig } from '../../../build/webpack.prod.conf';
+//
+// console.log('webpackConfig: ', webpackConfig);
+console.log('process.env.NODE_ENV: ', process.env.NODE_ENV);
+// console.log('location.host: ', location.host);
+
+
+// export let store.getters.HOST_ADDRESS = process.env.NODE_ENV === 'production' ? prod.APIENDPOINT : dev.APIENDPOINT;
 axios.defaults.withCredentials = true;
 
-// console.log('server: ', server);
+
+// store.getters.HOST_ADDRESS = store.getters.HOST_ADDRESS.replace(/['"]+/g, '');
+// console.log('store.getters.HOST_ADDRESS: ', store.getters.HOST_ADDRESS);
 
 const header = () => {
 	const authUser = JSON.parse(localStorage.getItem('authUser'));
@@ -19,7 +30,7 @@ const header = () => {
 
 const getUsers = () => (
 	new Promise((resolve, reject) => {
-		axios.get(`${server}/users`, header())
+		axios.get(`${store.getters.HOST_ADDRESS}/users`, header())
 			.then((result) => {
 				return resolve(result);
 			})
@@ -40,8 +51,8 @@ const saveAuthUser = (result) => {
 
 const loginService = (credentials) => (
 	new Promise((resolve, reject) => {
-		// console.log('host', server);
-		axios.post(`${server}/auth/login`, credentials)
+		// console.log('host', store.getters.HOST_ADDRESS);
+		axios.post(`${store.getters.HOST_ADDRESS}/auth/login`, credentials)
 			.then((result) => {
 				// console.log('result in loginService.js: ', result);
 				saveAuthUser(result);
@@ -59,11 +70,14 @@ const loginService = (credentials) => (
 	}));
 
 const logout = () => {
-	return axios.get(`${server}/logout`);
+	return axios.get(`${store.getters.HOST_ADDRESS}/logout`);
 };
 
 const isLoggedIn = (req, res) => {
-	return axios.get(`${server}/auth/me`)
+	console.log('`${store.getters.HOST_ADDRESS}/auth/me`: ', `${store.getters.HOST_ADDRESS}/auth/me`);
+	console.log('store: ', store.state.auth.hostAddress);
+	console.log('getter: ', store.getters.HOST_ADDRESS);
+	return axios.get(`${store.getters.HOST_ADDRESS}/auth/me`)
 		.then(result => {
 			// console.log('result in isLoggedIn (loginService.js): ', result);
 			return result.data;
@@ -76,7 +90,7 @@ const isLoggedIn = (req, res) => {
 
 const createUser = (email, password) => (
 	new Promise((resolve, reject) => {
-		axios.post(`${server}/users`, {
+		axios.post(`${store.getters.HOST_ADDRESS}/users`, {
 			email,
 			password,
 		})
@@ -93,7 +107,7 @@ const createUser = (email, password) => (
 
 const updateUserDetails = (userId, details) => (
 	new Promise((resolve, reject) => {
-		axios.patch(`${server}/users/${userId}`, details, header())
+		axios.patch(`${store.getters.HOST_ADDRESS}/users/${userId}`, details, header())
 			.then((result) => {
 				// console.log('result: ', result);
 				return resolve(result);
@@ -107,7 +121,7 @@ const updateUserDetails = (userId, details) => (
 
 const updateUserAccess = (userId, access) => (
 	new Promise((resolve, reject) => {
-		axios.patch(`${server}/users/access/${userId}`, { access }, header())
+		axios.patch(`${store.getters.HOST_ADDRESS}/users/access/${userId}`, { access }, header())
 			.then((result) => {
 				// console.log('result: ', result);
 				return resolve(result);
@@ -122,7 +136,7 @@ const updateUserAccess = (userId, access) => (
 
 const removeUserAccount = (userId) => {
 	return new Promise((resolve, reject) => {
-		axios.delete(`${server}/users/${userId}`, header())
+		axios.delete(`${store.getters.HOST_ADDRESS}/users/${userId}`, header())
 			.then((result) => {
 				return resolve(result);
 			})

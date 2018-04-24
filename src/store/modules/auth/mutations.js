@@ -6,12 +6,15 @@ import _ from 'lodash';
 import { mutation } from './types';
 
 
-let server = dev.APIENDPOINT;
-if (process.env.NODE_ENV === 'production') {
-	server = prod.APIENDPOINT;
-}
+// let server = dev.APIENDPOINT;
+// if (process.env.NODE_ENV === 'production') {
+// 	server = prod.APIENDPOINT;
+// }
 
 export default {
+	[mutation.SET_HOST_ADDRESS]: (auth, host) => {
+		auth.hostAddress = host;
+	},
 	[mutation.SET_LOGGED_IN]: (auth, status) => {
 		auth.isLoggedIn = status;
 	},
@@ -29,7 +32,7 @@ export default {
 			auth.details.name = data.details.name;
 			auth.details.email = data.email;
 			auth.userId = data._id;
-			auth.details.avatar = data.details.avatar !== '' ? `${server}/${data.details.avatar}` : '';
+			auth.details.avatar = data.details.avatar !== '' ? `${auth.hostAddress}/${data.details.avatar}` : '';
 		}
 		auth.users = _.map(auth.users, (user) => {
 			if (user._id === userId) {
@@ -40,7 +43,7 @@ export default {
 					details: {
 						...user.details,
 						name: data.details.name,
-						avatar: data.details.avatar !== '' ? `${server}/${data.details.avatar}` : '',
+						avatar: data.details.avatar !== '' ? `${auth.hostAddress}/${data.details.avatar}` : '',
 					},
 				}
 			} else {
@@ -80,7 +83,7 @@ export default {
 				...user,
 				details: {
 					...user.details,
-					avatar: user.details.avatar !== '' ? `${server}/${user.details.avatar}` : '',
+					avatar: user.details.avatar !== '' ? `${auth.hostAddress}/${user.details.avatar}` : '',
 				},
 			};
 			// console.log('updatedUser: ', updatedUser);
@@ -104,6 +107,6 @@ export default {
 		}
 	},
 	[mutation.SET_DEFAULT_AVATAR]: (auth, avatar) => {
-		auth.defaultAvatar = `${server}/${avatar}`;
+		auth.defaultAvatar = `${auth.hostAddress}/${avatar}`;
 	},
 };

@@ -4,6 +4,9 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
+// console.log('process.env: ', process.env.NODE_ENV);
+// console.log('config: ', config);
+
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }

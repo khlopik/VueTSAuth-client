@@ -3,6 +3,7 @@ import { getter } from './types';
 import _ from 'lodash';
 
 export default {
+	[getter.HOST_ADDRESS]: state => (state.auth.hostAddress),
 	[getter.IS_LOGGED_IN]: state => (state.auth.isLoggedIn),
 	[getter.GET_USER_URL]: state => (state.auth.userUrl),
 	[getter.GET_USER_ACCESS]: state => (state.auth.userAccess),
