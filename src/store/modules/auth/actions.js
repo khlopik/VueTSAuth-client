@@ -1,4 +1,4 @@
-import { authUserByToken, updateUserDetails, removeUserAccount, getUsers, updateUserAccess } from '@/components/LoginPage/loginService';
+import { authUserByToken, updateUserDetails, removeUserAccount, getUsers, updateUserAccess, isLoggedIn, loginService, logout } from '@/components/LoginPage/loginService';
 import { action, mutation } from './types';
 
 export default {
@@ -8,37 +8,51 @@ export default {
 	[action.SET_USER_URL]: ({commit}, url) => {
 		commit(mutation.SET_USER_URL, url);
 	},
+	[action.LOGIN_BY_CREDENTIALS]: ({commit}, credentials) => {
+		return new Promise((resolve, reject) => {
+			loginService(credentials)
+				.then(result => {
+					// console.log('result.data inside LOGIN_BY_CREDENTIALS action: ', result);
+					commit(mutation.SET_LOGGED_IN, true);
+					commit(mutation.UPDATE_USER_DETAILS, { data: result });
+					// commit(mutation.SET_DEFAULT_AVATAR, result.data.defaultAvatar);
+					resolve();
+				})
+				.catch(error => {
+					console.log('error: ', error);
+					reject();
+				});
+		});
+
+	},
 	[action.CHECK_LOGIN_ON_SERVER]: ({commit}) => {
 		return new Promise((resolve, reject) => {
-			const authUser = JSON.parse(localStorage.getItem('authUser'));
-			if (authUser && authUser.token) {
-				authUserByToken(authUser.token)
-					.then((result) => {
-						commit(mutation.SET_LOGGED_IN, true);
-						commit(mutation.UPDATE_USER_DETAILS, { data: result.data });
-						commit(mutation.SET_DEFAULT_AVATAR, result.data.defaultAvatar);
-						return resolve();
-					})
-					.catch((e) => {
-						commit(mutation.SET_LOGGED_IN, false);
-						return reject(e);
-					});
-			} else {
-				commit(mutation.SET_LOGGED_IN, false);
-				return resolve();
-			}
+			isLoggedIn()
+				.then((result) => {
+					commit(mutation.SET_LOGGED_IN, true);
+					// console.log('result in actions: ', result);
+					commit(mutation.UPDATE_USER_DETAILS, { data: result });
+					commit(mutation.SET_DEFAULT_AVATAR, result.defaultAvatar);
+					return resolve();
+				})
+				.catch((e) => {
+					commit(mutation.SET_LOGGED_IN, false);
+					return reject(e);
+				});
 		});
 	},
 	[action.LOGOUT_USER]: ({commit}) => {
-		localStorage.removeItem('authUser');
+		logout()
+			.catch(error => {
+				return 'Cannot logout';
+			});
 		commit(mutation.SET_USER_ACCESS, '');
 		commit(mutation.SET_LOGGED_IN, false);
 	},
 	[action.UPDATE_USER_DETAILS_ON_SERVER]: ({ commit }, { userId, details }) => {
 		return updateUserDetails(userId, details)
 			.then((result) => {
-				console.log('action in then before mutation');
-				console.log('result: ', result);
+				// console.log('result: ', result);
 				commit(mutation.UPDATE_USER_DETAILS, { userId, data: result.data });
 				return Promise.resolve();
 			})

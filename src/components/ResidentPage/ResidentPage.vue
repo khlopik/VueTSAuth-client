@@ -33,13 +33,13 @@ export default {
 		}),
 	},
 	mounted() {
-		authUserByToken(JSON.parse(localStorage.getItem('authUser')).token)
-			.then((result) => {
-				this.email = result.data.email;
-			})
-			.catch(() => (
-				'Cannot find user information'
-			));
+		// authUserByToken(JSON.parse(localStorage.getItem('authUser')).token)
+		// 	.then((result) => {
+		// 		this.email = result.data.email;
+		// 	})
+		// 	.catch(() => (
+		// 		'Cannot find user information'
+		// 	));
 	},
 };
 </script>

@@ -32,17 +32,18 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-	store.dispatch(types.auth.action.CHECK_LOGIN_ON_SERVER);
-	const authUser = JSON.parse(localStorage.getItem('authUser'));
-	if (to.meta.requiresAuth) {
-		if (!authUser || !authUser.token) {
-			next();
-		} else {
-			next();
-		}
-	} else {
-		next();
-	}
+	// store.dispatch(types.auth.action.CHECK_LOGIN_ON_SERVER);
+	// const authUser = JSON.parse(localStorage.getItem('authUser'));
+	// if (to.meta.requiresAuth) {
+	// 	if (!authUser || !authUser.token) {
+	// 		next();
+	// 	} else {
+	// 		next();
+	// 	}
+	// } else {
+	// 	next();
+	// }
+	next();
 });
 
 export default router;

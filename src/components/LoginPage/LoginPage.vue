@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { types } from '@/store';
 import { required, minLength, sameAs, email } from 'vuelidate/lib/validators';
 import { createUser, loginService } from './loginService';
@@ -143,18 +143,28 @@ export default {
 		},
 	},
 	methods: {
+		...mapActions({
+			login: types.auth.action.LOGIN_BY_CREDENTIALS,
+		}),
 		loginUser() {
-			loginService(this.email, this.password)
+			this.login({ email: this.email, password: this.password })
 				.then(() => {
 					this.$router.push('/');
 				})
-				.catch((status) => {
-					if (status === 401) {
-						this.customError = 'Username or password is incorrect!';
-					} else {
-						this.customError = 'Unknown network error';
-					}
+				.catch((error) => {
+					console.log('error inside LoginPage: ', error);
 				});
+			// loginService({ email: this.email, password: this.password })
+			// 	.then(() => {
+			// 		this.$router.push('/');
+			// 	})
+			// 	.catch((status) => {
+			// 		if (status === 401) {
+			// 			this.customError = 'Username or password is incorrect!';
+			// 		} else {
+			// 			this.customError = 'Unknown network error';
+			// 		}
+			// 	});
 		},
 		createUser() {
 			createUser(this.email, this.password)
