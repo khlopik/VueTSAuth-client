@@ -117,6 +117,7 @@ export default {
 	computed: {
 		...mapGetters({
 			initialUserUrl: types.auth.getter.GET_USER_URL,
+			userMessages: types.userMessages.getter.USER_MESSAGES,
 		}),
 		emailErrors() {
 			const errors = [];
@@ -126,16 +127,24 @@ export default {
 			return errors;
 		},
 		passwordErrors() {
-			const errors = [];
+			const userMessages = this.newUser ? [] : this.userMessages.map(message => (message.messageText));
+			let errors = [];
 			if (!this.$v.password.$dirty) return errors;
+			errors = [
+				...userMessages,
+			];
 			!this.$v.password.required && errors.push('Password is required');
 			!this.$v.password.minLength && errors.push('Password should be at least 8 characters');
 			this.customError && errors.push(this.customError);
 			return errors;
 		},
 		confirmPasswordErrors() {
-			const errors = [];
+			const userMessages = this.newUser ? this.userMessages.map(message => (message.messageText)) : [];
+			let errors = [];
 			if (!this.$v.confirmPassword.$dirty) return errors;
+			errors = [
+				...userMessages,
+			];
 			!this.$v.confirmPassword.required && errors.push('Confirm password is required');
 			!this.$v.confirmPassword.sameAsPassword && errors.push('Passwords must be identical');
 			return errors;
@@ -150,37 +159,12 @@ export default {
 			this.createUser({ email: this.email, password: this.password });
 		},
 		loginUser() {
-			this.login({ email: this.email, password: this.password })
-				.then(() => {
-					this.$router.push('/');
-				})
-				.catch((error) => {
-					console.log('error inside LoginPage: ', error);
-				});
-			// loginService({ email: this.email, password: this.password })
-			// 	.then(() => {
-			// 		this.$router.push('/');
-			// 	})
-			// 	.catch((status) => {
-			// 		if (status === 401) {
-			// 			this.customError = 'Username or password is incorrect!';
-			// 		} else {
-			// 			this.customError = 'Unknown network error';
-			// 		}
-			// 	});
+			this.login({email: this.email, password: this.password});
 		},
-		// createUser() {
-		// 	createUser(this.email, this.password)
-		// 		.then(() => {
-		// 			this.$router.push('/');
-		// 		})
-		// 		.catch(() => {
-		// 		});
-		// },
 	},
 };
 </script>
 
-<style scoped>
+<style lang="scss" type="text/scss" scoped>
 
 </style>

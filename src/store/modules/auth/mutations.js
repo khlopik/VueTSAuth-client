@@ -1,15 +1,6 @@
 /* eslint no-param-reassign: "error" */
-// import config from '@/../config';
-import prod from '@/../config/prod.env';
-import dev from '@/../config/dev.env';
 import _ from 'lodash';
 import { mutation } from './types';
-
-
-// let server = dev.APIENDPOINT;
-// if (process.env.NODE_ENV === 'production') {
-// 	server = prod.APIENDPOINT;
-// }
 
 export default {
 	[mutation.SET_HOST_ADDRESS]: (auth, host) => {

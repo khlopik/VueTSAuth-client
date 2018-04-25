@@ -7,7 +7,7 @@ const isLoggedIn = () => (axios.get(`${store.getters.HOST_ADDRESS}/auth/me`));
 
 const getUsers = () => (axios.get(`${store.getters.HOST_ADDRESS}/users`));
 
-const loginService = credentials => (axios.post(`${store.getters.HOST_ADDRESS}/auth/login`, credentials));
+const loginByCredentials = credentials => (axios.post(`${store.getters.HOST_ADDRESS}/auth/login`, credentials));
 
 const logout = () => (axios.get(`${store.getters.HOST_ADDRESS}/logout`));
 
@@ -20,7 +20,7 @@ const updateUserAccess = (userId, access) => (axios.patch(`${store.getters.HOST_
 const removeUserAccount = userId => (axios.delete(`${store.getters.HOST_ADDRESS}/users/${userId}`));
 
 export {
-	loginService,
+	loginByCredentials,
 	isLoggedIn,
 	logout,
 	getUsers,

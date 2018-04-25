@@ -4,8 +4,10 @@
 			<div class="main">
 				<Header class="header"/>
 				<component :is="userComponent" class="content"/>
+				<user-messages class="user-messages"/>
 				<Footer class="footer"/>
 			</div>
+
 		</v-app>
 	</div>
 </template>
@@ -18,6 +20,7 @@ import Footer from '@/components/Footer/Footer';
 import AdminPage from '@/components/AdminPage/AdminPage';
 import ResidentPage from '@/components/ResidentPage/ResidentPage';
 import UnauthorizedPage from '@/components/UnauthorizedPage/UnauthorizedPage';
+import UserMessages from '@/components/UserMessages/UserMessages';
 
 export default {
 	name: 'Main',
@@ -27,6 +30,7 @@ export default {
 		UnauthorizedPage,
 		Header,
 		Footer,
+		UserMessages,
 	},
 	data() {
 		return {
@@ -55,24 +59,17 @@ export default {
 		...mapActions({
 			checkAuthorisation: types.auth.action.CHECK_LOGIN_ON_SERVER,
 			requestHostAddress: types.auth.action.REQUEST_HOST_ADDRESS,
+			addMessage: types.userMessages.action.SHOW_USER_MESSAGE,
 		}),
 	},
 	beforeMount() {
-		console.log('beforeMount in Main');
-		// this.requestHostAddress();
-		// const env = '' + process.env.APIENDPOINT;
-		// console.log('process.env.NODE_ENV: ', `${process.env.APIENDPOINT}`);
 		this.checkAuthorisation()
-			// .catch((e) => {
-			// 	console.log('e: ', e);
-			// 	// this.$router.go();
-			// });
 	},
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" type="text/scss" scoped>
 	h1, h2 {
 		font-weight: normal;
 	}
@@ -113,5 +110,14 @@ export default {
 		overflow: scroll;
 		overflow-x: hidden;
 		flex-shrink: initial;
+	}
+	.user-messages {
+		position: absolute;
+		bottom: 5vh;
+		width: 100%;
+		/*min-height: 150px;*/
+		z-index: 100;
+		box-sizing: border-box;
+		/*outline: 3px solid red;*/
 	}
 </style>

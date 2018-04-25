@@ -17,9 +17,10 @@ export default {
 		commit(mutation.SET_DEFAULT_AVATAR, result.data.defaultAvatar);
 	}),
 	[action.LOGIN_BY_CREDENTIALS]: catchErrors(async ({ commit }, credentials) => {
-		const result = await api.loginService(credentials);
+		const result = await api.loginByCredentials(credentials);
 		commit(mutation.SET_LOGGED_IN, true);
 		commit(mutation.UPDATE_USER_DETAILS, { data: result.data });
+		router.push('/');
 	}),
 	[action.LOGOUT_USER]: catchErrors(async ({ commit }) => {
 		await api.logout();
