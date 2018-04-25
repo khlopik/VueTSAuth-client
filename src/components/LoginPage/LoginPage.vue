@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
 		<v-content>
-			<v-container fluid fill-height @keyup.enter="newUser ? createNewUser() : loginUser()">
+			<v-container fluid fill-height @keyup.enter="!$v.$invalid && (newUser ? createNewUser() : loginUser())">
 				<v-layout align-center justify-center>
 					<v-flex xs12 sm8 md4>
 						<v-card class="elevation-12">
