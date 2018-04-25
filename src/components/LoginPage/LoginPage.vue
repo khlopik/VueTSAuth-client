@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
 		<v-content>
-			<v-container fluid fill-height @keyup.enter="newUser ? createUser() : loginUser()">
+			<v-container fluid fill-height @keyup.enter="newUser ? createNewUser() : loginUser()">
 				<v-layout align-center justify-center>
 					<v-flex xs12 sm8 md4>
 						<v-card class="elevation-12">
@@ -66,7 +66,7 @@
 								<v-spacer/>
 								<v-btn
 									color="primary"
-									@click.prevent="newUser ? createUser() : loginUser()"
+									@click.prevent="newUser ? createNewUser : loginUser()"
 									:disabled="$v.$invalid">
 									{{newUser ? 'Create' : 'Login'}}</v-btn>
 							</v-card-actions>
@@ -82,7 +82,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import { types } from '@/store';
 import { required, minLength, sameAs, email } from 'vuelidate/lib/validators';
-import { createUser, loginService } from './loginService';
 
 export default {
 	name: 'LoginPage',
@@ -145,7 +144,11 @@ export default {
 	methods: {
 		...mapActions({
 			login: types.auth.action.LOGIN_BY_CREDENTIALS,
+			createUser: types.auth.action.CREATE_USER,
 		}),
+		createNewUser() {
+			this.createUser({ email: this.email, password: this.password });
+		},
 		loginUser() {
 			this.login({ email: this.email, password: this.password })
 				.then(() => {
@@ -166,14 +169,14 @@ export default {
 			// 		}
 			// 	});
 		},
-		createUser() {
-			createUser(this.email, this.password)
-				.then(() => {
-					this.$router.push('/');
-				})
-				.catch(() => {
-				});
-		},
+		// createUser() {
+		// 	createUser(this.email, this.password)
+		// 		.then(() => {
+		// 			this.$router.push('/');
+		// 		})
+		// 		.catch(() => {
+		// 		});
+		// },
 	},
 };
 </script>

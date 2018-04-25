@@ -63,10 +63,10 @@ export default {
 		// const env = '' + process.env.APIENDPOINT;
 		// console.log('process.env.NODE_ENV: ', `${process.env.APIENDPOINT}`);
 		this.checkAuthorisation()
-			.catch((e) => {
-				console.log('e: ', e);
-				// this.$router.go();
-			});
+			// .catch((e) => {
+			// 	console.log('e: ', e);
+			// 	// this.$router.go();
+			// });
 	},
 };
 </script>
