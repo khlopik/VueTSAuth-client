@@ -3,9 +3,6 @@ import _ from 'lodash';
 import { mutation } from './types';
 
 export default {
-	[mutation.SET_HOST_ADDRESS]: (auth, host) => {
-		auth.hostAddress = host;
-	},
 	[mutation.SET_LOGGED_IN]: (auth, status) => {
 		auth.isLoggedIn = status;
 	},

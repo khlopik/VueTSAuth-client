@@ -34,12 +34,6 @@ export default {
 			hideMessage: types.userMessages.action.HIDE_USER_MESSAGE,
 		}),
 	},
-	mounted() {
-		console.log('this.userMessages: ', this.userMessages);
-	},
-	updated() {
-		console.log('this.userMessages: ', this.userMessages);
-	}
 };
 </script>
 

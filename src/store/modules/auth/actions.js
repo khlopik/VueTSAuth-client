@@ -4,12 +4,6 @@ import catchErrors from '@/services/handleErrors';
 import { action, mutation } from './types';
 
 export default {
-	[action.REQUEST_HOST_ADDRESS]: ({ commit }) => {
-		const host = location.host.includes('localhost') ?
-			`${location.protocol}//${location.hostname}:8081` :
-			`${location.protocol}//${location.hostname}`;
-		commit(mutation.SET_HOST_ADDRESS, host);
-	},
 	[action.CHECK_LOGIN_ON_SERVER]: catchErrors(async ({ commit }) => {
 		const result = await api.isLoggedIn();
 		commit(mutation.SET_LOGGED_IN, true);
