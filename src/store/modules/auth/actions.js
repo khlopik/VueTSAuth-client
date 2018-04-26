@@ -1,7 +1,9 @@
 import * as api from '@/components/LoginPage/loginService';
 import router from '@/router';
 import catchErrors from '@/services/handleErrors';
+import { types } from '@/store/modules';
 import { action, mutation } from './types';
+
 
 export default {
 	[action.CHECK_LOGIN_ON_SERVER]: catchErrors(async ({ commit, getters }) => {
@@ -29,24 +31,40 @@ export default {
 		await api.createUser(email, password);
 		router.push('/');
 	}),
-	[action.UPDATE_USER_DETAILS_ON_SERVER]: async ({ commit, getters }, { userId, details }) => {
+	[action.UPDATE_USER_DETAILS_ON_SERVER]: catchErrors(async ({ commit, getters, dispatch }, { userId, details }) => {
 		const result = await api.updateUserDetails(userId, details);
 		commit(mutation.UPDATE_USER_DETAILS,
 			{ userId, data: result.data, hostAddress: getters.HOST_ADDRESS });
-	},
+		dispatch(types.userMessages.action.SHOW_USER_MESSAGE,
+			{ messageText: 'User details have been successfully updated',
+				messageType: 'success',
+			});
+	}),
 	[action.CLEAR_USER_AVATAR]: ({ commit }, userId) => {
 		commit(mutation.CLEAR_USER_AVATAR, userId);
 	},
-	[action.REMOVE_USER_ACCOUNT]: catchErrors(async ({ dispatch }, userId) => {
+	[action.REMOVE_USER_ACCOUNT]: catchErrors(async ({ dispatch, state }, userId) => {
 		await api.removeUserAccount(userId);
-		dispatch(action.GET_USERS_FROM_SERVER);
+		if (state.userId === userId) {
+			router.go();
+		} else {
+			dispatch(action.GET_USERS_FROM_SERVER);
+		}
+		dispatch(types.userMessages.action.SHOW_USER_MESSAGE,
+			{ messageText: 'User has been successfully deleted',
+				messageType: 'success',
+			});
 	}),
 	[action.GET_USERS_FROM_SERVER]: catchErrors(async ({ commit, getters }) => {
 		const result = await api.getUsers();
 		commit(mutation.SAVE_USERS_TO_STORE, { users: result.data, hostAddress: getters.HOST_ADDRESS });
 	}),
-	[action.UPDATE_USER_ACCESS]: catchErrors(async ({ commit }, { userId, access }) => {
+	[action.UPDATE_USER_ACCESS]: catchErrors(async ({ commit, dispatch }, { userId, access }) => {
 		const result = await api.updateUserAccess(userId, access);
 		commit(mutation.UPDATE_USER_ACCESS, { userId, access: result.data.access });
+		dispatch(types.userMessages.action.SHOW_USER_MESSAGE,
+			{ messageText: 'User access has been successfully updated',
+				messageType: 'success',
+			});
 	}),
 };

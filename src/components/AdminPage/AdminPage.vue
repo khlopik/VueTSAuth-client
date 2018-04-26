@@ -19,7 +19,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { types } from '@/store';
-import UserDetails from '@/components/UserDetails';
+import UserDetails from '@/components/UserDetails/UserDetails';
 
 export default {
 	name: 'admin-page',

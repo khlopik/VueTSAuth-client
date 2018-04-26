@@ -13,7 +13,7 @@
 
 <script>
 import { authUserByToken } from '@/components/LoginPage/loginService';
-import UserDetails from '@/components/UserDetails';
+import UserDetails from '@/components/UserDetails/UserDetails';
 import { types } from '@/store';
 import { mapGetters } from 'vuex';
 

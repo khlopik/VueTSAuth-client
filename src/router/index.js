@@ -1,12 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from '@/components/Main';
-import Posts from '@/components/Posts';
 import LoginPage from '@/components/LoginPage/LoginPage';
-import AdminPage from '@/components/AdminPage/AdminPage';
-import ResidentPage from '@/components/ResidentPage/ResidentPage';
 import { authUserByToken } from '@/components/LoginPage/loginService';
-import store, { types } from '@/store';
+import { types } from '@/store';
 
 Vue.use(Router);
 

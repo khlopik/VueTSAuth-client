@@ -34,17 +34,17 @@
 				<v-flex xs4>
 					<v-subheader>Avatar:</v-subheader>
 					<div class="avatar-buttons">
-						<label :class="`avatar-label${isSaving ? ' disabled' : ''}`">
+						<label :class="`avatar-label${busyStatus ? ' disabled' : ''}`">
 							<input
 								type="file"
 								name="file"
 								class="avatar-file"
 								ref="updatedAvatar"
-								:disabled="isSaving"
+								:disabled="busyStatus"
 								@change="saveForm($event.target.files); accept='image/*'">
 							Load image
 						</label>
-						<v-btn color="warning" class="avatar-clear" @click="clearAvatar" :disabled="(!userDetails.avatar && !newAvatar) || isSaving">Clear avatar</v-btn>
+						<v-btn color="warning" class="avatar-clear" @click="clearAvatar" :disabled="(!userDetails.avatar && !newAvatar) || busyStatus">Clear avatar</v-btn>
 					</div>
 				</v-flex>
 				<v-flex xs8 class="avatar-image">
@@ -66,21 +66,14 @@
 			<v-btn
 				color="success"
 				@click="saveUserDetails"
-				:disabled="!formChanged || isSaving">Save</v-btn>
+				:disabled="!formChanged || busyStatus">Save</v-btn>
 		</div>
 	</div>
 </template>
 
-// :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file"
-
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { types } from '@/store';
-
-const STATUS_INITIAL = 0;
-const STATUS_SAVING = 1;
-const STATUS_SUCCESS = 2;
-const STATUS_FAILED = 3;
 
 export default {
 	name: 'UserDetails',
@@ -94,7 +87,7 @@ export default {
 		return {
 			name: this.userDetails.name,
 			newAvatar: '',
-			savingStatus: STATUS_INITIAL,
+			busyStatus: false,
 			formData: new FormData(),
 		};
 	},
@@ -104,18 +97,6 @@ export default {
 			currentUser: types.auth.getter.GET_USER_DETAILS,
 			defaultAvatar: types.auth.getter.GET_DEFAULT_AVATAR,
 		}),
-		isInitial() {
-			return this.savingStatus === STATUS_INITIAL;
-		},
-		isSaving() {
-			return this.savingStatus === STATUS_SAVING;
-		},
-		isSuccess() {
-			return this.savingStatus === STATUS_SUCCESS;
-		},
-		isFailed() {
-			return this.savingStatus === STATUS_FAILED;
-		},
 		formChanged() {
 			return (this.name !== this.userDetails.name) || this.newAvatar || this.formData.has('avatar');
 		},
@@ -127,24 +108,17 @@ export default {
 			removeUserAccount: types.auth.action.REMOVE_USER_ACCOUNT,
 			updateUserAccess: types.auth.action.UPDATE_USER_ACCESS,
 		}),
-		saveUserDetails() {
+		async saveUserDetails() {
 			if (this.name !== this.userDetails.name) {
 				this.formData.append('name', this.name);
 			}
-			this.savingStatus = STATUS_SAVING;
-			this.updateDetails({
+			this.busyStatus = true;
+			await this.updateDetails({
 				userId: this.userDetails.id,
 				details: this.formData,
-			})
-				.then(() => {
-					this.savingStatus = STATUS_SUCCESS;
-					this.formData = new FormData();
-					this.newAvatar = '';
-				})
-				.catch(() => {
-					this.savingStatus = STATUS_FAILED;
-					this.formData = new FormData();
-				});
+			});
+			this.busyStatus = false;
+			this.formData = new FormData();
 		},
 		saveForm(files) {
 			if (!files.length) return;
@@ -156,7 +130,6 @@ export default {
 				self.newAvatar = e.target.result;
 			};
 			reader.readAsDataURL(files[0]);
-			this.savingStatus = STATUS_INITIAL;
 		},
 		clearAvatar() {
 			this.newAvatar = '';
@@ -168,31 +141,16 @@ export default {
 		inputChange($event) {
 			this.name = $event;
 		},
-		deleteAccount(userId) {
-			this.removeUserAccount(userId)
-				.then((result) => {
-					if (userId === this.currentUser.id) {
-						this.$router.go();
-					}
-					// console.log('result: ', result);
-				})
-				.catch((error) => {
-					console.log('error: ', error);
-				});
+		async deleteAccount(userId) {
+			this.busyStatus = true;
+			await this.removeUserAccount(userId);
+			this.busyStatus = false;
 		},
 		updateAccess() {
 			this.updateUserAccess({
 				userId: this.userDetails.id,
 				access: this.userDetails.access === 'Resident' ? 'Admin' : 'Resident',
-			})
-				.then(() => {
-					if (this.userDetails.id === this.currentUser.id) {
-						this.$router.go();
-					}
-				})
-				.catch((error) => {
-					console.log('error: ', error);
-				});
+			});
 		},
 	},
 };
@@ -204,6 +162,8 @@ export default {
 	}
 	.user-avatar {
 		height: 150px;
+		width: 150px;
+		object-fit: cover;
 		border-radius: 50%;
 	}
 	.avatar-file {
