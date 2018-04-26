@@ -19,11 +19,6 @@ import { types } from '@/store';
 
 export default {
 	name: 'UserMessages',
-	data() {
-		return {
-			alert: true,
-		};
-	},
 	computed: {
 		...mapGetters({
 			userMessages: types.userMessages.getter.USER_MESSAGES,

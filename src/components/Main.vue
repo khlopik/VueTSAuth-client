@@ -7,7 +7,7 @@
 				<user-messages class="user-messages"/>
 				<Footer class="footer"/>
 			</div>
-
+			<user-waiting v-if="true"/>
 		</v-app>
 	</div>
 </template>
@@ -21,6 +21,7 @@ import AdminPage from '@/components/AdminPage/AdminPage';
 import ResidentPage from '@/components/ResidentPage/ResidentPage';
 import UnauthorizedPage from '@/components/UnauthorizedPage/UnauthorizedPage';
 import UserMessages from '@/components/UserMessages/UserMessages';
+import UserWaiting from '@/components/UserMessages/UserWaiting';
 
 export default {
 	name: 'Main',
@@ -31,6 +32,7 @@ export default {
 		Header,
 		Footer,
 		UserMessages,
+		UserWaiting,
 	},
 	data() {
 		return {
@@ -43,7 +45,7 @@ export default {
 			userAccess: types.auth.getter.GET_USER_ACCESS,
 		}),
 		userComponent() {
-			if (!this.isLoggedIn) {
+			if (!this.isLoggedIn && this.isLoggedIn !== undefined) {
 				return 'UnauthorizedPage';
 			}
 			if (this.userAccess === 'Admin') {

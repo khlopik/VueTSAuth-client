@@ -1,6 +1,6 @@
 export default {
 	userId: null,
-	isLoggedIn: false,
+	isLoggedIn: undefined,
 	userUrl: '',
 	userAccess: '',
 	defaultAvatar: '',

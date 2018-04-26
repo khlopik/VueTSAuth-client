@@ -14,4 +14,14 @@ export default {
 	[action.HIDE_USER_MESSAGE]: ({ commit }, messageId) => {
 		commit(mutation.REMOVE_USER_MESSAGE, messageId);
 	},
+	[action.SHOW_WAITING]: ({ commit }) => {
+		commit(mutation.SET_WAITING, true);
+		commit(mutation.SET_WAITING_SHOW, true);
+	},
+	[action.HIDE_WAITING]: ({ commit, getters }) => {
+		commit(mutation.SET_WAITING, false);
+		setTimeout(() => {
+			commit(mutation.SET_WAITING_SHOW, false);
+		}, getters.GET_WAITING_DELAY);
+	},
 };

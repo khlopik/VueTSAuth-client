@@ -135,7 +135,6 @@ export default {
 			this.newAvatar = '';
 			this.$refs.updatedAvatar.value = '';
 			this.clearUserAvatar(this.userDetails.id);
-			this.savingStatus = STATUS_INITIAL;
 			this.formData.append('avatar', '');
 		},
 		inputChange($event) {

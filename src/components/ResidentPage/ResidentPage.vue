@@ -1,18 +1,16 @@
 <template>
   <div class="resident">
 		<div class="resident-title">
-			<h1>Hello on Resident page</h1>
+			<h1>Welcome to Resident page</h1>
 		</div>
 		<div class="resident-details">
 			<h2>Your details:</h2>
 			<user-details class="resident-user" :userDetails="userDetails"/>
 		</div>
-
 	</div>
 </template>
 
 <script>
-import { authUserByToken } from '@/components/LoginPage/loginService';
 import UserDetails from '@/components/UserDetails/UserDetails';
 import { types } from '@/store';
 import { mapGetters } from 'vuex';
@@ -22,24 +20,10 @@ export default {
 	components: {
 		UserDetails,
 	},
-	data() {
-		return {
-			email: '',
-		};
-	},
 	computed: {
 		...mapGetters({
 			userDetails: types.auth.getter.GET_USER_DETAILS,
 		}),
-	},
-	mounted() {
-		// authUserByToken(JSON.parse(localStorage.getItem('authUser')).token)
-		// 	.then((result) => {
-		// 		this.email = result.data.email;
-		// 	})
-		// 	.catch(() => (
-		// 		'Cannot find user information'
-		// 	));
 	},
 };
 </script>

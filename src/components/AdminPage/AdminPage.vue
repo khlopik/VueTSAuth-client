@@ -1,14 +1,19 @@
 <template>
   <div class="admin">
 		<div class="admin-title">
-			<h1>Hello on Admin page</h1>
+			<h1>Welcome to Admin page</h1>
 		</div>
 		<v-expansion-panel class="userlist" popout>
 			<h2>User list:</h2>
 			<v-expansion-panel-content v-for="user in users" :key="user.email" class="user-panel">
 				<div slot="header" class="user-header">
-					{{`${user.email}${user.id === userDetails.id ? ' (Current user)' : ''}`}}
-					<span :class="`user-access${user.access === 'Resident' ? '' : ' user-admin'}`">{{user.access}}</span>
+					<span>{{user.email}}</span>
+					<span style="font-weight: bold;">
+						{{user.id === userDetails.id ? ' (Current user)' : ''}}
+					</span>
+					<span :class="`user-access${user.access === 'Resident' ? '' : ' user-admin'}`">
+						{{user.access}}
+					</span>
 				</div>
 				<user-details :userDetails="user" class="user-details"/>
 			</v-expansion-panel-content>
