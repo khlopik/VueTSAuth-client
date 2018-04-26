@@ -25,17 +25,16 @@ export default {
 		// }
 		// return state.auth.details.avatar;
 	},
-	[getter.GET_ALL_USERS]: state => {
-		const result = _.map(state.auth.users, user => {
-			return {
+	[getter.GET_ALL_USERS]: state => (
+		_.map(state.auth.users, user => (
+			{
 				name: user.details.name,
 				avatar: user.details.avatar,
 				email: user.email,
 				id: user._id,
 				access: user.access,
 			}
-		});
-		return result;
-	},
+		))
+	),
 	[getter.GET_DEFAULT_AVATAR]: state => (state.auth.defaultAvatar),
 };
